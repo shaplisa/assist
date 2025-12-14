@@ -1,6 +1,6 @@
 import os
 from openai import OpenAI
-from keys import API_DS
+from app.keys import API_DS
 
 
 client = OpenAI(api_key=API_DS, base_url="https://api.deepseek.com")
