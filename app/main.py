@@ -26,18 +26,22 @@ def main() -> None:
     while True:
 
         get_ip = ip()
-        if not get_ip:
 
-            for a in WIFI:
-                r = connect_to_wifi(a.get("ssid"), a.get("password"))
-                if r == True:
-                    return
-                time.sleep(1)
+        if not get_ip:
+            print("wifi is not")
+            image("wifi is not", 5, 10)
+            
+
+            # for a in WIFI:
+            #     r = connect_to_wifi(a.get("ssid"), a.get("password"))
+            #     if r == True:
+            #         return
+            #     time.sleep(5)
         else:
             print(f"ip is: {get_ip}")
             image(get_ip, 5, 10)
 
 
-        time.sleep(60)
+        time.sleep(2)
 
 main()
