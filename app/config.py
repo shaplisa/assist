@@ -7,3 +7,7 @@ WIFI = [
 
 SUDO_PASS = "lisa682907"
 
+# Настройка пинов (BCM нумерация)
+BUTTON_PIN = 5   # GPIO5 (физический пин 29)
+BUTTON_OFF_PIN = 6   # GPIO6 (физический пин 31)
+

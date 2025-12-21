@@ -1,9 +1,11 @@
-from config import WIFI
+from config import WIFI, SUDO_PASS
 from luma.core.interface.serial import i2c
 from luma.oled.device import ssd1306
 from PIL import Image, ImageDraw, ImageFont
 from network import connect_to_wifi, ip
 import time
+from buttons import status_button
+import subprocess
 
 
 
@@ -42,6 +44,28 @@ def main() -> None:
             image(get_ip, 5, 10)
 
 
+        
+        status_but = status_button(6) 
+        if status_but == True:
+            print("выключаюсь")
+            command = ["sudo", "poweroff"]
+
+            proc = subprocess.Popen(
+                command,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True
+            )
+            proc.communicate(input = SUDO_PASS + "\n", timeout=30)
+
+            break
+
+
+
         time.sleep(2)
 
 main()
+
+
+
