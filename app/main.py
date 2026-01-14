@@ -49,8 +49,11 @@ def main() -> None:
         
         status_but = status_button(BUTTON_OFF_PIN ) 
         if status_but == True:
+
             print("выключаюсь")
             image("i am powering off(",5,20)
+            time.sleep(2)
+
             command = ["sudo", "poweroff"]
 
             proc = subprocess.Popen(
