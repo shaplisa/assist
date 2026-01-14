@@ -1,4 +1,4 @@
-from config import WIFI, SUDO_PASS
+from config import WIFI, SUDO_PASS, BUTTON_OFF_PIN 
 from luma.core.interface.serial import i2c
 from luma.oled.device import ssd1306
 from PIL import Image, ImageDraw, ImageFont
@@ -6,6 +6,11 @@ from network import connect_to_wifi, ip
 import time
 from buttons import status_button
 import subprocess
+import RPi.GPIO as GPIO
+
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BUTTON_OFF_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 
@@ -45,7 +50,7 @@ def main() -> None:
 
 
         
-        status_but = status_button(6) 
+        status_but = status_button(BUTTON_OFF_PIN ) 
         if status_but == True:
             print("выключаюсь")
             command = ["sudo", "poweroff"]
@@ -63,7 +68,7 @@ def main() -> None:
 
 
 
-        time.sleep(2)
+        time.sleep(0.2)
 
 main()
 
