@@ -26,9 +26,6 @@ def image(text, x, y):
     device.display(image)
 
 
-
-
-
 def main() -> None:
     while True:
 
@@ -53,6 +50,7 @@ def main() -> None:
         status_but = status_button(BUTTON_OFF_PIN ) 
         if status_but == True:
             print("выключаюсь")
+            image("i am powering off(",5,20)
             command = ["sudo", "poweroff"]
 
             proc = subprocess.Popen(
