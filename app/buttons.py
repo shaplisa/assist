@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import RPi.GPIO as GPIO
 import time
+from config import BUTTON_OFF_PIN
 
 
 
