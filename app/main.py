@@ -1,7 +1,7 @@
 from config import WIFI, SUDO_PASS, BUTTON_OFF_PIN 
-from luma.core.interface.serial import i2c
-from luma.oled.device import ssd1306
-from PIL import Image, ImageDraw, ImageFont
+# from luma.core.interface.serial import i2c
+# from luma.oled.device import ssd1306
+# from PIL import Image, ImageDraw, ImageFont
 from network import connect_to_wifi, ip
 import time
 from buttons import status_button
