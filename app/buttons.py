@@ -7,9 +7,9 @@ import time
 
 
 
-# GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 # GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# GPIO.setup(BUTTON_OFF_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_OFF_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 
@@ -20,8 +20,8 @@ def status_button(name_button):
     try:
             
         if GPIO.input(name_button) == GPIO.LOW:
-            print("кнопка выключения сработала")
-            time.sleep(0.2)
+            
+            
             return True
 
     except KeyboardInterrupt:

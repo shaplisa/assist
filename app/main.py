@@ -6,24 +6,24 @@ from network import connect_to_wifi, ip
 import time
 from buttons import status_button
 import subprocess
-import RPi.GPIO as GPIO
-
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(BUTTON_OFF_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+from display import image 
 
 
 
-serial = i2c(port=1, address=0x3C)
-device = ssd1306(serial, width=128, height=64)
 
 
-def image(text, x, y):
-    image = Image.new('1', (device.width, device.height))
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.load_default()
-    draw.text((x, y), text, font=font, fill=255)
-    device.display(image)
+
+
+# serial = i2c(port=1, address=0x3C)
+# device = ssd1306(serial, width=128, height=64)
+
+
+# def image(text, x, y):
+#     image = Image.new('1', (device.width, device.height))
+#     draw = ImageDraw.Draw(image)
+#     font = ImageFont.load_default()
+#     draw.text((x, y), text, font=font, fill=255)
+#     device.display(image)
 
 
 def main() -> None:
@@ -52,7 +52,7 @@ def main() -> None:
 
             print("выключаюсь")
             image("i am powering off(",5,20)
-            time.sleep(2)
+            
 
             command = ["sudo", "poweroff"]
 
