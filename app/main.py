@@ -69,9 +69,9 @@ def main() -> None:
             
 
         status_hold = status_button(BUTTON_PIN)
-        if status_hold == True and flag_hold > 10:
+        if status_hold == True and flag_hold > 5:
             
-            image("идёт запись звука", 5, 20)
+            image("I am bringing sound", 5, 20)
             
         elif status_hold == True:
             flag_hold += 1
