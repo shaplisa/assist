@@ -3,6 +3,7 @@ from config import WIFI, SUDO_PASS, BUTTON_OFF_PIN, BUTTON_PIN
 # from luma.oled.device import ssd1306
 # from PIL import Image, ImageDraw, ImageFont
 from network import connect_to_wifi, ip
+from audio import get_audio_mic
 import time
 from buttons import status_button
 import subprocess
@@ -96,10 +97,17 @@ def main() -> None:
 
         # CLICK BUTTON ACTION
         status_hold = status_button(BUTTON_PIN)
-        
 
-        if status_hold == True: print("Yes")
-        elif status_hold == False: print("No")
+
+        if status_hold == True:
+            print("Yes")
+            name_file = get_audio_mic()
+
+
+
+        elif status_hold == False:
+            #print("No")
+            pass
 
 
         # if status_hold == True and flag_hold_sound > 10:
