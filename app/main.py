@@ -25,7 +25,7 @@ def main() -> None:
     while True:
 
         get_ip = ip()
-        print(get_ip)
+        #print(get_ip)
 
         if not get_ip:
             print("wifi is not")
@@ -83,6 +83,8 @@ def main() -> None:
 
         else:
             flag_false += 1
+
+        print("flag_false:", flag_false, "status_off:", status_off)
 
             
 
