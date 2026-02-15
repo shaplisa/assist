@@ -11,6 +11,7 @@ import os
 flag_hold_sound = 0
 flag_off = 0
 flag_false = 0
+flag_ip = 0
 filename = "sound.wav"
 
 
@@ -64,6 +65,7 @@ def main() -> None:
             #print("выключаюсь")
             image("i am powering off(",5,20)
             time.sleep(1)
+            flag_ip = 0
             image("    ", 5, 20)
             command = ["sudo", "poweroff"]
 
