@@ -8,31 +8,19 @@ from buttons import status_button
 import subprocess
 from display import image 
 import os 
+
+
+
 flag_hold_sound = 0
 flag_off = 0
 flag_false = 0
-flag_ip = 0
 filename = "sound.wav"
 
 
 
 
-
-
-
-# serial = i2c(port=1, address=0x3C)
-# device = ssd1306(serial, width=128, height=64)
-
-
-# def image(text, x, y):
-#     image = Image.new('1', (device.width, device.height))
-#     draw = ImageDraw.Draw(image)
-#     font = ImageFont.load_default()
-#     draw.text((x, y), text, font=font, fill=255)
-#     device.display(image)
-
-
 def main() -> None:
+    flag_ip = 0
     while True:
 
         get_ip = ip()
@@ -48,10 +36,6 @@ def main() -> None:
             image(get_ip, 5, 10)
             time.sleep(20)
             flag_ip = 1
-
-        #status_but_ip = status_button(BUTTON_OFF_PIN)
-        #if status_but_ip == True:
-
 
 
 
