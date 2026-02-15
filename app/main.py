@@ -36,10 +36,12 @@ def main() -> None:
     while True:
 
         get_ip = ip()
+        print(get_ip)
 
         if not get_ip:
             print("wifi is not")
             image("wifi is not", 5, 10)
+            flag_ip = 0
             
         elif flag_ip == 0 and get_ip:
             print(f"ip is: {get_ip}")
@@ -57,10 +59,11 @@ def main() -> None:
         if status_off == True and flag_off > 18:
 
             #print("выключаюсь")
-            image("i am powering off(",5,20)
-            time.sleep(1)
-            flag_ip = 0
+            image("i am powering off(", 5, 20)
+            time.sleep(2)
+            #flag_ip = 0
             image("    ", 5, 20)
+            
             command = ["sudo", "poweroff"]
 
             proc = subprocess.Popen(
@@ -71,14 +74,17 @@ def main() -> None:
                 universal_newlines=True
             )
             proc.communicate(input = SUDO_PASS + "\n", timeout=30)
-            flag_off = 0
+
+
         elif status_off == True:
             flag_off += 1
+
         elif flag_off < 10 and flag_false > 0:
             image(get_ip, 5, 10)
             time.sleep(15)
             flag_false = 0
             flag_off = 0
+
         else:
             flag_false += 1
 
