@@ -37,6 +37,7 @@ def main() -> None:
             image(get_ip, 5, 10)
             time.sleep(5)
             print("end 5 sec")
+            image("    ", 5, 20)
             flag_ip = 1
 
 
