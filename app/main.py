@@ -11,9 +11,6 @@ import os
 
 
 
-flag_hold_sound = 0
-
-filename = "sound.wav"
 
 
 
@@ -22,6 +19,8 @@ def main() -> None:
     flag_ip = 0
     flag_off = 0
     flag_false = 0
+    flag_hold_sound = 0
+    filename = "sound.wav"
     while True:
 
         get_ip = ip()
@@ -49,16 +48,17 @@ def main() -> None:
             #flag_ip = 0
             image("    ", 5, 20)
             
-            command = ["sudo", "poweroff"]
+            # command = ["sudo", "poweroff"]
 
-            proc = subprocess.Popen(
-                command,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True
-            )
-            proc.communicate(input = SUDO_PASS + "\n", timeout=30)
+            # proc = subprocess.Popen(
+            #     command,
+            #     stdin=subprocess.PIPE,
+            #     stdout=subprocess.PIPE,
+            #     stderr=subprocess.PIPE,
+            #     universal_newlines=True
+            # )
+            # proc.communicate(input = SUDO_PASS + "\n", timeout=30)
+            continue
 
 
         elif status_off == True:
