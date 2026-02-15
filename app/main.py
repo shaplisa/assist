@@ -41,26 +41,26 @@ def main() -> None:
 
 
 
-        # status_off = status_button(BUTTON_OFF_PIN) 
-        # if status_off == True and flag_off > 18:
+        status_off = status_button(BUTTON_OFF_PIN) 
+        if status_off == True and flag_off > 18:
 
-        #     #print("выключаюсь")
-        #     image("i am powering off(", 5, 20)
-        #     time.sleep(2)
-        #     #flag_ip = 0
-        #     image("    ", 5, 20)
+            #print("выключаюсь")
+            image("i am powering off(", 5, 20)
+            time.sleep(2)
+            #flag_ip = 0
+            image("    ", 5, 20)
             
-        #     # command = ["sudo", "poweroff"]
+            # command = ["sudo", "poweroff"]
 
-        #     # proc = subprocess.Popen(
-        #     #     command,
-        #     #     stdin=subprocess.PIPE,
-        #     #     stdout=subprocess.PIPE,
-        #     #     stderr=subprocess.PIPE,
-        #     #     universal_newlines=True
-        #     # )
-        #     # proc.communicate(input = SUDO_PASS + "\n", timeout=30)
-        #     continue
+            # proc = subprocess.Popen(
+            #     command,
+            #     stdin=subprocess.PIPE,
+            #     stdout=subprocess.PIPE,
+            #     stderr=subprocess.PIPE,
+            #     universal_newlines=True
+            # )
+            # proc.communicate(input = SUDO_PASS + "\n", timeout=30)
+            continue
 
 
         # elif status_off == True:
