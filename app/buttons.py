@@ -13,20 +13,20 @@ GPIO.setup(BUTTON_OFF_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 
-def status_button(name_button):
+def status_button(name_button) -> bool | None:
+    """ Абстрактная функция получения статуса кнопки"""
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(name_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    try:
-            
+    try:  
         if GPIO.input(name_button) == GPIO.LOW:
-            
-            
             return True
+        else:
+            return False
 
     except KeyboardInterrupt:
         GPIO.cleanup()
-        return False
+        return None
 
 
 
