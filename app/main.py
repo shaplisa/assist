@@ -12,8 +12,7 @@ import os
 
 
 flag_hold_sound = 0
-flag_off = 0
-flag_false = 0
+
 filename = "sound.wav"
 
 
@@ -21,6 +20,8 @@ filename = "sound.wav"
 
 def main() -> None:
     flag_ip = 0
+    flag_off = 0
+    flag_false = 0
     while True:
 
         get_ip = ip()
