@@ -44,45 +44,45 @@ def main() -> None:
 
         status_off = status_button(BUTTON_OFF_PIN) 
 
-        if status_off == True:
-            print("выключаюсь")
-            image("i am powering off(", 5, 20)
-            time.sleep(2)
-            #flag_ip = 0
-            image("    ", 5, 20)
-
-        # if status_off == True and flag_off > 18:
-
-        #     #print("выключаюсь")
+        # if status_off == True:
+        #     print("выключаюсь")
         #     image("i am powering off(", 5, 20)
         #     time.sleep(2)
         #     #flag_ip = 0
         #     image("    ", 5, 20)
+
+        if status_off == True and flag_off > 18:
+
+            #print("выключаюсь")
+            image("i am powering off(", 5, 20)
+            time.sleep(2)
+            #flag_ip = 0
+            image("    ", 5, 20)
             
-            # command = ["sudo", "poweroff"]
+            command = ["sudo", "poweroff"]
 
-            # proc = subprocess.Popen(
-            #     command,
-            #     stdin=subprocess.PIPE,
-            #     stdout=subprocess.PIPE,
-            #     stderr=subprocess.PIPE,
-            #     universal_newlines=True
-            # )
-            # proc.communicate(input = SUDO_PASS + "\n", timeout=30)
-            # continue
+            proc = subprocess.Popen(
+                command,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True
+            )
+            proc.communicate(input = SUDO_PASS + "\n", timeout=30)
+            continue
 
 
-        # elif status_off == True:
-        #     flag_off += 1
+        elif status_off == True:
+            flag_off += 1
 
-        # elif flag_off < 10 and flag_false > 0:
-        #     image(get_ip, 5, 10)
-        #     time.sleep(15)
-        #     flag_false = 0
-        #     flag_off = 0
+        elif flag_off < 10 and flag_false > 0:
+            image(get_ip, 5, 10)
+            time.sleep(15)
+            flag_false = 0
+            flag_off = 0
 
-        # else:
-        #     flag_false += 1
+        else:
+            flag_false += 1
 
             
 
