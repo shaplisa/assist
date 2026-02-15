@@ -7,7 +7,11 @@ import time
 from buttons import status_button
 import subprocess
 from display import image 
-flag_hold = 0
+import os 
+flag_hold_sound = 0
+flag_off = 0
+flag_false = 0
+filename = "sound.wav"
 
 
 
@@ -42,19 +46,25 @@ def main() -> None:
             #     if r == True:
             #         return
             #     time.sleep(5)
-        else:
+        elif flag_ip == 0:
             print(f"ip is: {get_ip}")
             image(get_ip, 5, 10)
+            time.sleep(20)
+            flag_ip = 1
+
+        #status_but_ip = status_button(BUTTON_OFF_PIN)
+        #if status_but_ip == True:
 
 
-        
-        status_but = status_button(BUTTON_OFF_PIN) 
-        if status_but == True:
 
-            print("выключаюсь")
+
+        status_off = status_button(BUTTON_OFF_PIN) 
+        if status_off == True and flag_off > 18:
+
+            #print("выключаюсь")
             image("i am powering off(",5,20)
             time.sleep(1)
-            
+            image("    ", 5, 20)
             command = ["sudo", "poweroff"]
 
             proc = subprocess.Popen(
@@ -65,26 +75,30 @@ def main() -> None:
                 universal_newlines=True
             )
             proc.communicate(input = SUDO_PASS + "\n", timeout=30)
+            flag_off = 0
+        elif status_off == True:
+            flag_off += 1
+        elif flag_off < 10 and flag_false > 0:
+            image(get_ip, 5, 10)
+            time.sleep(15)
+            flag_false = 0
+            flag_off = 0
+        else:
+            flag_false += 1
 
             
 
         status_hold = status_button(BUTTON_PIN)
-        if status_hold == True and flag_hold > 5:
+        if status_hold == True and flag_hold_sound > 10:
             
             image("I am bringing sound", 5, 20)
             
         elif status_hold == True:
-            flag_hold += 1
+            flag_hold_sound+= 1
         else:
-            flag_hold = 0
+            flag_hold_sound = 0
         
-
-        
-
-
-
-
-        time.sleep(0.2)
+        time.sleep(0.1)
 
 main()
 
