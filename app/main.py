@@ -1,4 +1,4 @@
-from config import WIFI, SUDO_PASS, BUTTON_OFF_PIN 
+from config import WIFI, SUDO_PASS, BUTTON_OFF_PIN, BUTTON_PIN
 # from luma.core.interface.serial import i2c
 # from luma.oled.device import ssd1306
 # from PIL import Image, ImageDraw, ImageFont
@@ -7,6 +7,7 @@ import time
 from buttons import status_button
 import subprocess
 from display import image 
+flag_hold = 0
 
 
 
@@ -47,13 +48,13 @@ def main() -> None:
 
 
         
-        status_but = status_button(BUTTON_OFF_PIN ) 
+        status_but = status_button(BUTTON_OFF_PIN) 
         if status_but == True:
 
             print("выключаюсь")
             image("i am powering off(",5,20)
+            time.sleep(1)
             
-
             command = ["sudo", "poweroff"]
 
             proc = subprocess.Popen(
@@ -65,7 +66,21 @@ def main() -> None:
             )
             proc.communicate(input = SUDO_PASS + "\n", timeout=30)
 
-            break
+            
+
+        status_hold = status_button(BUTTON_PIN)
+        if status_hold == True and flag_hold > 10:
+            
+            image("идёт запись звука", 5, 20)
+            
+        elif status_hold == True:
+            flag_hold += 1
+        else:
+            flag_hold = 0
+        
+
+        
+
 
 
 

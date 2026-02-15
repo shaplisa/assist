@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import RPi.GPIO as GPIO
-import time
-from config import BUTTON_OFF_PIN
+from config import BUTTON_OFF_PIN, BUTTON_PIN
 
 
 
@@ -9,7 +8,7 @@ from config import BUTTON_OFF_PIN
 
 
 GPIO.setmode(GPIO.BCM)
-# GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(BUTTON_OFF_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
