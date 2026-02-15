@@ -41,13 +41,7 @@ def main() -> None:
             print("wifi is not")
             image("wifi is not", 5, 10)
             
-
-            # for a in WIFI:
-            #     r = connect_to_wifi(a.get("ssid"), a.get("password"))
-            #     if r == True:
-            #         return
-            #     time.sleep(5)
-        elif flag_ip == 0:
+        elif flag_ip == 0 and get_ip:
             print(f"ip is: {get_ip}")
             image(get_ip, 5, 10)
             time.sleep(20)
