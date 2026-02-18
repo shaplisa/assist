@@ -9,6 +9,7 @@ from buttons import status_button
 import subprocess
 from display import image 
 import os 
+import RPi.GPIO as GPIO
 
 
 
@@ -108,7 +109,8 @@ def main() -> None:
         elif status_hold == False:
             #print("No")
             pass
-
+        
+        GPIO.cleanup()
 
         # if status_hold == True and flag_hold_sound > 10:
             
