@@ -80,11 +80,12 @@ def main() -> None:
         elif flag_off < 10 and flag_false > 0:
             image(get_ip, 5, 10)
             time.sleep(5)
-            flag_false = 0
             flag_off = 0
+            flag_false = 0
 
-        else:
+        elif flag_off > 1 and status_off == False:
             flag_false += 1
+            
 
         # print("flag_false:", flag_false, "status_off:", status_off)
 
