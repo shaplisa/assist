@@ -77,7 +77,7 @@ def main() -> None:
         elif status_off == True:
             flag_off += 1
 
-        elif flag_off < 10 and flag_false > 0:
+        elif flag_off < 10 and flag_false > 0 and status_off == True:
             image(get_ip, 5, 10)
             time.sleep(5)
             flag_off = 0
