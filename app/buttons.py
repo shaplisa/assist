@@ -2,17 +2,6 @@
 import RPi.GPIO as GPIO
 from config import BUTTON_OFF_PIN, BUTTON_PIN
 
-
-
-
-
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(BUTTON_OFF_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-
-
 def status_button(name_button) -> bool | None:
     """ Абстрактная функция получения статуса кнопки"""
     try:  
@@ -23,12 +12,6 @@ def status_button(name_button) -> bool | None:
 
     except KeyboardInterrupt:
         return None
-
-
-
-
-
-
 
 # try:
 #     while True:

@@ -13,8 +13,9 @@ import RPi.GPIO as GPIO
 
 
 
-
-
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(BUTTON_OFF_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 def main() -> None:
@@ -22,8 +23,8 @@ def main() -> None:
     flag_off = 0
     flag_false = 0
     flag_hold_sound = 0
-    filename = "sound.wav"
 
+    
     while True:
 
 
@@ -44,51 +45,46 @@ def main() -> None:
             image("    ", 5, 20)
             flag_ip = 1
 
-        # ---------
+        status_off = status_button(BUTTON_OFF_PIN) 
+
+        if status_off == True and flag_off > 11 :
+            # print("выключаюсь")
+            image("i am powering off(", 5, 20)
+            time.sleep(2)
+            flag_ip = 0
+            image("    ", 5, 20)
+            command = ["sudo", "poweroff"]
+            command = ["sudo", "poweroff"]
+
+            # proc = subprocess.Popen(
+            #     command,
+            #     stdin=subprocess.PIPE,
+            #     stdout=subprocess.PIPE,
+            #     stderr=subprocess.PIPE,
+            #     universal_newlines=True
+            # )
+            # proc.communicate(input = SUDO_PASS + "\n", timeout=30)
+            # proc = subprocess.Popen(
+            #     command,
+            #     stdin=subprocess.PIPE,
+            #     stdout=subprocess.PIPE,
+            #     stderr=subprocess.PIPE,
+            #     universal_newlines=True
+            # )
+            # proc.communicate(input = SUDO_PASS + "\n", timeout=30)            
 
 
+        elif status_off == True:
+            flag_off += 1
 
-        # status_off = status_button(BUTTON_OFF_PIN) 
+        elif flag_off < 10 and flag_false > 0:
+            image(get_ip, 5, 10)
+            time.sleep(5)
+            flag_false = 0
+            flag_off = 0
 
-        # # if status_off == True:
-        # #     print("выключаюсь")
-        # #     image("i am powering off(", 5, 20)
-        # #     time.sleep(2)
-        # #     #flag_ip = 0
-        # #     image("    ", 5, 20)
-
-        # if status_off == True and flag_off > 18:
-
-        #     #print("выключаюсь")
-        #     image("i am powering off(", 5, 20)
-        #     time.sleep(2)
-        #     #flag_ip = 0
-        #     image("    ", 5, 20)
-            
-        #     command = ["sudo", "poweroff"]
-
-        #     proc = subprocess.Popen(
-        #         command,
-        #         stdin=subprocess.PIPE,
-        #         stdout=subprocess.PIPE,
-        #         stderr=subprocess.PIPE,
-        #         universal_newlines=True
-        #     )
-        #     proc.communicate(input = SUDO_PASS + "\n", timeout=30)
-        #     continue
-
-
-        # elif status_off == True:
-        #     flag_off += 1
-
-        # elif flag_off < 10 and flag_false > 0:
-        #     image(get_ip, 5, 10)
-        #     time.sleep(15)
-        #     flag_false = 0
-        #     flag_off = 0
-
-        # else:
-        #     flag_false += 1
+        else:
+            flag_false += 1
 
         # print("flag_false:", flag_false, "status_off:", status_off)
 
