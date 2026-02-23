@@ -1,0 +1,10 @@
+openai==2.9.0
+python-dotenv==1.2.1
+RPi.GPIO==0.7.1
+pillow==12.1.1
+luma.core==2.5.3
+luma.oled==3.14.0
+sox==14.4.2
+
+
+# pip install -r requirements.txt
