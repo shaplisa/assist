@@ -9,6 +9,7 @@ from display import image
 import threading
 from audio import Audio
 
+audio = Audio()
 
 
 
@@ -93,8 +94,6 @@ def main() -> None:
 
         # CLICK BUTTON ACTION
         status_hold = status_button(BUTTON_PIN)
-
-        audio = Audio()
 
         recording_active = audio.get_recording_active()
         record_thread = None
