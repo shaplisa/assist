@@ -95,17 +95,12 @@ class YaSpeechKit:
         print("Start recording\n")
         
         # Читаем данные и отправляем
-        bytes_per_second = self.rate * 2  # 16 бит = 2 байта на сэмпл
-        total_bytes = bytes_per_second * self.record_seconds
-        bytes_read = 0
-        
-        while bytes_read < total_bytes:
+        while self.recording_active:  # пока кнопка зажата
             data = self.record_process.stdout.read(self.chunk)
             if not data:
                 break
             yield stt_pb2.StreamingRequest(chunk=stt_pb2.AudioChunk(data=data))
-            bytes_read += len(data)
-        
+                
         print("Finished recording\n")
         
         # Завершаем процесс записи
