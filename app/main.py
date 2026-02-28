@@ -21,7 +21,7 @@ def main() -> None:
     flag_off = 0
     flag_false = 0
     
-    
+    audio.play_audio("./wavs/1.wav")
 
     while True:
 
@@ -99,7 +99,8 @@ def main() -> None:
         record_thread = None
 
         if status_hold == True and not recording_active:
-            image("записываю вопрос,говори.", 5, 10)
+            image("записываю вопрос,", 5, 10)
+            image("говори", 5, 20 )
             audio.change_recording_active(True)
             # name_file = f"record_{int(time.time())}.wav"
             name_file = f"record.wav"
