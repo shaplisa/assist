@@ -114,8 +114,8 @@ def main() -> None:
         record_thread = None
 
         if status_hold == True and not recording_active:
-            image("записываю вопрос,", 5, 10)
-            image("говори", 5, 20 )
+            #image("записываю вопрос,", 5, 10)
+            image("ГОВОРИ!", 5, 20 )
             speechkit.change_recording_active(True)
 
             # Запуск в отдельном потоке
@@ -128,13 +128,19 @@ def main() -> None:
             
             if record_thread:
                 record_thread.join()
-                input_question = speechkit.get_last_transcription()
-                print("input_question:", input_question)
 
             record_thread = None
 
+            input_question = speechkit.get_last_transcription()
+            print("input_question:", input_question)
 
-            # text_stream_ds = deepseek.stream_llm_response(input_question)
+
+            if input_question and input_question.strip():
+                text_stream_ds = deepseek.stream_llm_response(input_question)
+                speechkit.stream_synthesis(text_stream_ds)
+
+
+
             # speechkit.stream_synthesis(text_stream_ds)
 
 

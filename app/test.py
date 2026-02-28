@@ -40,15 +40,22 @@
 # # 2.
 
 
-
-
-
 elif status_hold == False and recording_active:
     print("Останавливаю запись...")
     speechkit.change_recording_active(False)
     
     if record_thread:
         record_thread.join()
-        # Теперь можно получить результат через атрибут
-        input_question = speechkit.get_last_transcription()
-        print("input_question:", input_question)
+        # После join поток гарантированно завершён
+        # и last_transcription уже сохранён
+    
+    record_thread = None
+    
+    # Читаем результат
+    input_question = speechkit.get_last_transcription()
+    print("input_question:", input_question)
+    
+    # Дальше идёт обработка - это нормально, не надо continue
+    if input_question and input_question.strip():
+        text_stream_ds = deepseek.stream_llm_response(input_question)
+        speechkit.stream_synthesis(text_stream_ds)
