@@ -3,29 +3,24 @@ from openai import OpenAI
 from keys import API_DS
 
 
-dialog = []
-
-dialog = [
-    {"role": "user", "content": "Привет как дела?"},
-    {"role": "assistant", "content": " В целом норм.."},
-    {"role": "user", "content": "Ясно.."}
-]
-dialog = dialog[3:]
-
 def respons_ds(text: str) -> str:
-    client = OpenAI(api_key=API_DS, base_url="https://api.deepseek.com")
+    dialog = []
+    dialog = dialog[-20:]
+    messages = [{"role": "system", "content": "Ты ассистент ребенка. Твой ответ всегда состоит из 3 слов!"}]
 
+    client = OpenAI(api_key=API_DS, base_url="https://api.deepseek.com")
+    dialog.append({"role": "user", "content": text})
+    for i in dialog:
+        messages.append(i)
     response = client.chat.completions.create(
         model="deepseek-chat",
-        messages=[
-            {"role": "system", "content": "Ты ассистент ребенка. Твой ответ всегда состоит из 3 слов!"},
-            {"role": "user", "content": text},
-            # {"role": "assistant", "content": answer}
-        ],
+        messages=messages,
         stream=False)
+    
 
 
     full_response = response.choices[0].message.content
+    dialog.append({"role": "assistant", "content": full_response})
     #print(full_response)
     return full_response
 

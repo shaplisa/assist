@@ -9,6 +9,7 @@ device = ssd1306(serial, width=128, height=64)
 def image(text, x, y):
     image = Image.new('1', (device.width, device.height))
     draw = ImageDraw.Draw(image)
-    font = ImageFont.load_default()
+    # font = ImageFont.load_default() только англ
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12)
     draw.text((x, y), text, font=font, fill=255)
     device.display(image)

@@ -32,11 +32,11 @@ def main() -> None:
 
         if not get_ip:
             #print("wifi is not")
-            image("wifi is not", 5, 10)
+            image("вай-фай не подключён", 5, 10)
             flag_ip = 0
             
         elif flag_ip == 0 and get_ip:
-            print(f"ip is: {get_ip}")
+            print(f"ip : {get_ip}")
             image(get_ip, 5, 10)
             time.sleep(5)
             # print("end 5 sec")
@@ -51,7 +51,7 @@ def main() -> None:
 
         if button_off_status == True and flag_off > 11 :
             # print("выключаюсь")
-            image("i am powering off(", 5, 20)
+            image("выключаюсь(", 5, 20)
             time.sleep(2)
             flag_ip = 0
             flag_off = 0
@@ -99,7 +99,7 @@ def main() -> None:
         record_thread = None
 
         if status_hold == True and not recording_active:
-            print("Начинаю запись...")
+            image("записываю вопрос,говори.", 5, 10)
             audio.change_recording_active(True)
             # name_file = f"record_{int(time.time())}.wav"
             name_file = f"record.wav"
