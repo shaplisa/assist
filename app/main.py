@@ -125,6 +125,7 @@ def main() -> None:
             record_thread.start()
 
         elif status_hold == False and recording_active:
+            time.sleep(1.5)
             print("Останавливаю запись...")
             speechkit.change_recording_active(False)
             
