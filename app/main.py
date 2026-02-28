@@ -26,6 +26,7 @@ def main() -> None:
     flag_false = 0
     flag_memory_get = 0
     recording_active = False
+    record_thread = None
     
     audio.play_audio("./wavs/1.wav")
 
@@ -110,8 +111,6 @@ def main() -> None:
         status_hold = status_button(BUTTON_PIN)
 
         recording_active = speechkit.get_recording_active()
-        #print(recording_active)
-        record_thread = None
 
         if status_hold == True and not recording_active:
             #image("записываю вопрос,", 5, 10)
