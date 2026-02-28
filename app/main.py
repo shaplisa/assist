@@ -2,8 +2,8 @@ from config import BUTTON_OFF_PIN, BUTTON_PIN, SUDO_PASS
 from network import ip
 import time
 from buttons import status_button
-from mod_openai import transcription, get_voice
-from deepseek import respons_ds
+from deepseek import DeepSeek
+from speechkit import YaSpeechKit
 import subprocess
 from display import image 
 import threading
@@ -11,6 +11,9 @@ from audio import Audio
 from memory import memory_percent_get
 
 audio = Audio()
+
+deepseek = DeepSeek()
+speechkit = YaSpeechKit()
 
 
 
@@ -99,40 +102,48 @@ def main() -> None:
         elif flag_off > 1 and button_off_status == False:
             flag_false += 1
             
+
+
+
         ''' кнпока правая со звуком'''
         status_hold = status_button(BUTTON_PIN)
 
-        recording_active = audio.get_recording_active()
+        recording_active = speechkit.get_recording_active()
         record_thread = None
 
         if status_hold == True and not recording_active:
             image("записываю вопрос,", 5, 10)
             image("говори", 5, 20 )
-            audio.change_recording_active(True)
-            # name_file = f"record_{int(time.time())}.wav"
-            name_file = f"record.wav"
+            speechkit.change_recording_active(True)
+
             # Запуск в отдельном потоке
-            record_thread = threading.Thread(target=audio.record_audio, args=(name_file,))
+            record_thread = threading.Thread(target=speechkit.stream_mic_record)
             record_thread.start()
 
         elif status_hold == False and recording_active:
             print("Останавливаю запись...")
-            audio.change_recording_active(False)
+            speechkit.change_recording_active(False)
             if record_thread:
                 record_thread.join()
             record_thread = None
 
-            answer_tr = transcription(name_file)
-            if not answer_tr:
-                print("WTF error")
-                return
+            input_question = speechkit.get_last_transcription()
+
+            text_stream_ds = deepseek.stream_llm_response(input_question)
+            speechkit.stream_synthesis(text_stream_ds)
+
+
+            # answer_tr = transcription(name_file)
+            # if not answer_tr:
+            #     print("WTF error")
+            #     return
             
-            answer_ds = respons_ds(answer_tr)
-            print("answer_ds:", answer_ds)
+            # answer_ds = respons_ds(answer_tr)
+            # print("answer_ds:", answer_ds)
 
-            name_file = get_voice(answer_ds)
+            # name_file = get_voice(answer_ds)
 
-            audio.play_audio(f"./{name_file}", 15)
+            # audio.play_audio(f"./{name_file}", 15)
 
 
         time.sleep(0.1)
