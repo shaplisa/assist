@@ -125,17 +125,14 @@ def main() -> None:
         elif status_hold == False and recording_active:
             print("Останавливаю запись...")
             speechkit.change_recording_active(False)
+            record_thread = None
             
             if record_thread:
                 record_thread.join()
 
-            record_thread = None
+                input_question = speechkit.get_last_transcription()
+                print("input_question:", input_question)
 
-            input_question = speechkit.get_last_transcription()
-            print("input_question:", input_question)
-
-
-            if input_question and input_question.strip():
                 text_stream_ds = deepseek.stream_llm_response(input_question)
                 speechkit.stream_synthesis(text_stream_ds)
 
