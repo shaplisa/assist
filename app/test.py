@@ -40,3 +40,15 @@
 # # 2.
 
 
+
+
+
+elif status_hold == False and recording_active:
+    print("Останавливаю запись...")
+    speechkit.change_recording_active(False)
+    
+    if record_thread:
+        record_thread.join()
+        # Теперь можно получить результат через атрибут
+        input_question = speechkit.get_last_transcription()
+        print("input_question:", input_question)
