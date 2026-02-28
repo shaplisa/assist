@@ -25,6 +25,7 @@ def main() -> None:
     flag_off = 0
     flag_false = 0
     flag_memory_get = 0
+    recording_active = False
     
     audio.play_audio("./wavs/1.wav")
 

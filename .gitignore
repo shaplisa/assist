@@ -2,3 +2,6 @@
 .env
 __pycache__/
 app/__pycache__/
+app/yandex/
+app/google/
+cloudapi/
