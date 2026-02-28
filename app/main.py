@@ -134,7 +134,7 @@ def main() -> None:
 
                 input_question = speechkit.get_last_transcription()
                 print("input_question:", input_question)
-                if input_question:
+                if not input_question:
                     # Звуковая заготовка
                     print("Нет транс текста.. ")
                     return
