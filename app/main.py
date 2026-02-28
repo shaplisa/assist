@@ -21,7 +21,8 @@ deepseek = DeepSeek()
 def main() -> None:
     """ Главная функция"""
 
-    image("█▓▒░ ELIZABET SYSTEMS ░▒▓█", 5, 10)
+    image("█▓▒░ ELIZABET ░▒▓█", 5, 10)
+    # SYSTEMS
 
     flag_ip = 0
     flag_off = 0
