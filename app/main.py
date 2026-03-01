@@ -45,12 +45,12 @@ def main() -> None:
             flag_ip = 0
             
         elif flag_ip == 0 and get_ip:
-            print(f"ip : {get_ip}")
+            # print(f"ip : {get_ip}")
             audio.play_audio("./wavs/4.wav")
-            image(get_ip, 5, 10)
-            time.sleep(5)
-            # print("end 5 sec")
-            image("    ", 5, 20)
+            # image(get_ip, 5, 10)
+            # time.sleep(5)
+            # # print("end 5 sec")
+            # image("    ", 5, 20)
             flag_ip = 1
 
             '''процент занятости памяти'''
