@@ -4,16 +4,17 @@ import time
 from buttons import status_button
 from deepseek import DeepSeek
 from speechkit import YaSpeechKit
-import subprocess
-from display import image 
-import threading
 from audio import Audio
+import subprocess
+# from display import image 
+from display import Display
+import threading
 from memory import memory_percent_get
 
 speechkit = YaSpeechKit()
 audio = Audio()
 deepseek = DeepSeek()
-
+display = Display()
 
 
 
@@ -21,7 +22,8 @@ deepseek = DeepSeek()
 def main() -> None:
     """ Главная функция"""
 
-    image("█▓▒░ ELIZABET ░▒▓█", 5, 10)
+    #image("█▓▒░ ELIZABET ░▒▓█", 5, 10)
+    display.add_display_task({"block": "line", "text": "█▓▒░ ELIZABET ░▒▓█"})
     # SYSTEMS
 
     flag_ip = 0
@@ -39,7 +41,8 @@ def main() -> None:
         
 
         if not get_ip:
-            image("вай-фай не подключён", 5, 10)
+            #image("вай-фай не подключён", 5, 10)
+            display.add_display_task({"block": "line", "text": "вай-фай не подключён"})
             audio.play_audio("./wavs/2.wav")
 
             flag_ip = 0
@@ -57,7 +60,7 @@ def main() -> None:
 
         memory_percent = memory_percent_get()
         if flag_memory_get > 20:
-            image(f"занято озу {memory_percent}%", 0, 5)
+            #image(f"занято озу {memory_percent}%", 0, 5)
             flag_memory_get = 0
         else:
             flag_memory_get += 1
@@ -69,11 +72,11 @@ def main() -> None:
         if button_off_status == True and flag_off > 11 :
             # print("выключаюсь")
             audio.play_audio("./wavs/3.wav")
-            image("выключаюсь(", 5, 20)
+            #image("выключаюсь(", 5, 20)
             time.sleep(2)
             flag_ip = 0
             flag_off = 0
-            image("    ", 5, 20)
+            #image("    ", 5, 20)
             command = ["sudo", "poweroff"]
             command = ["sudo", "poweroff"]
 
@@ -95,9 +98,9 @@ def main() -> None:
             proc.communicate(input = SUDO_PASS + "\n", timeout=30)            
 
         elif flag_off < 10 and flag_false > 0 :
-            image(get_ip, 5, 10)
+            #image(get_ip, 5, 10)
             time.sleep(5)
-            image("  ", 5, 10)
+            #image("  ", 5, 10)
             flag_off = 0
             flag_false = 0
 
@@ -117,7 +120,7 @@ def main() -> None:
 
         if status_hold == True and not recording_active:
             #image("записываю вопрос,", 5, 10)
-            image("ГОВОРИ!", 5, 20 )
+            #image("ГОВОРИ!", 5, 20 )
             speechkit.change_recording_active(True)
 
             # Запуск в отдельном потоке

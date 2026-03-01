@@ -8,6 +8,7 @@ from config import API_DS, MODEL_DS, TIMEOUT, HISTORY_LIMIT
 
 class DeepSeek:
     def __init__(self):
+        '''Инициализация диписика и его настроек'''
         self.client = OpenAI(
             api_key=API_DS,
             base_url="https://api.deepseek.com"
