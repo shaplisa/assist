@@ -138,13 +138,13 @@ def main() -> None:
 
             '''процент занятости памяти'''
 
-        memory_percent = memory_percent_get()
-        if flag_memory_get > 20:
-            #image(f"занято озу {memory_percent}%", 0, 5)
-            display.add_display_task({"block": "line", "text": f"озу:{memory_percent}%"})
-            flag_memory_get = 0
-        else:
-            flag_memory_get += 1
+        # memory_percent = memory_percent_get()
+        # if flag_memory_get > 20:
+        #     #image(f"занято озу {memory_percent}%", 0, 5)
+        #     display.add_display_task({"block": "line", "text": f"озу:{memory_percent}%"})
+        #     flag_memory_get = 0
+        # else:
+        #     flag_memory_get += 1
 
         '''кнопка левая'''
 
