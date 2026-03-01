@@ -10,7 +10,7 @@ class Network:
         self.interface = self._get_wifi_interface()
 
 
-
+    @staticmethod
     def get_ip() -> str:
         try:
             result = subprocess.check_output(["hostname", "-I"]).decode().strip()
