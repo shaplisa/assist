@@ -1,20 +1,88 @@
-from config import BUTTON_OFF_PIN, BUTTON_PIN, SUDO_PASS
-from network import ip
+from config import BUTTON_OFF_PIN, BUTTON_PIN, SUDO_PASS, CACHE_SEC_DISP
+from network import Network
 import time
 from buttons import status_button
 from deepseek import DeepSeek
 from speechkit import YaSpeechKit
 from audio import Audio
 import subprocess
+import psutil
+import os
 # from display import image 
 from display import Display
 import threading
-from memory import memory_percent_get
+# from memory import memory_percent_get
+
 
 speechkit = YaSpeechKit()
 audio = Audio()
 deepseek = DeepSeek()
 display = Display()
+net = Network()
+process = psutil.Process(os.getpid())
+
+
+
+class CachingParameters:
+    """ Получение актуальных данных для экрана
+        и вывод с временным кэшированием """
+    def __init__(self):
+        """ Обнуление последних показаний """
+        self.last_check = 0 # Время последней проверки
+        self.last_level = "" # Последний уровень сети WIFI
+        self.last_us_ram = 0 # Последний объем занятой памяти
+        self.last_volume = 0 # Последний уровень громкости
+        self.cache_sec = CACHE_SEC_DISP # Время кэширования
+
+
+    def _check_time(self):
+        """ Проверка времени кэша """
+        now = time.time()
+        if now - self.last_check >= CACHE_SEC_DISP:
+            self.last_check = now
+            return True
+        return False
+    
+    def _clear_last(self):
+        """ Сброс последних значений в кэше, что бы снова 
+        обновить на экране """
+        self.last_check = 0 # Время последней проверки
+        self.last_level = "" # Последний уровень сети WIFI
+        self.last_us_ram = 0 # Последний объем занятой памяти
+        self.last_volume = 0 # Последний уровень громкости
+    
+    def update_sys_display(self):
+        """ Вывод на экран системных параметров с кэшированием """
+        if self._check_time():
+
+            """ Вывод уровня сигнала WIFI"""
+            level = net.get_signal_cached()
+            if self.last_level != level:
+                display.add_display_task({"block": "icon", "name": level})
+                self.last_level = level
+
+
+            """ Вывод RAM """
+            used_ram = f"{process.memory_info().rss // 1024 // 1024}"
+            if self.last_us_ram != used_ram:
+                display.add_display_task({"block": "icon", "name": "ram"})
+                display.add_display_task({"block": "size_ram", "text": used_ram})
+                self.last_us_ram = used_ram
+
+            """ Вывод VOLUME """
+            volume = 10
+            if self.last_volume != volume:
+                display.add_display_task({"block": "icon", "name": "ico_vol"})
+                display.add_display_task({"block": "volume", "text": volume})
+                self.last_volume = volume
+
+
+
+
+
+
+
+
 
 
 
@@ -22,8 +90,17 @@ display = Display()
 def main() -> None:
     """ Главная функция"""
 
-    #image("█▓▒░ ELIZABET ░▒▓█", 5, 10)
-    display.add_display_task({"block": "line", "text": "█▓▒░ ELIZABET ░▒▓█"})
+    """ Заупуск основной функции и цикла
+        вносится или удаляется из списка цикла вывода экрана
+        реакция на кнопки """
+    
+    cache_param = CachingParameters()
+
+
+
+
+    # #image("█▓▒░ ELIZABET ░▒▓█", 5, 10)
+    # display.add_display_task({"block": "line", "text": "█▓▒░ ELIZABET ░▒▓█"})
     # SYSTEMS
 
     flag_ip = 0
@@ -37,7 +114,10 @@ def main() -> None:
 
     while True:
         ''' Условия с айпи и вай фаем'''
-        get_ip = ip()
+        get_ip = net.get_ip()
+
+        # Вывод на экран системных данных с кешированием
+        cache_param.update_sys_display()
         
 
         if not get_ip:
