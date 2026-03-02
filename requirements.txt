@@ -10,26 +10,34 @@ psutil
 # sox==1.5.0  # pip install sox - кривой пакет, установить после ручками
 
 
+##########
 
 # pip install -r requirements.txt
 # pip cache purge
 
+# 1. Установить в ручную кривой пакет - pip install sox он автоматом не устанавливается
 
-# Yandex SpeechKit:
-# 1. Установить в ручную кривой пакет - pip install sox
-# 2. https://yandex.cloud/ru/docs/speechkit/stt/api/microphone-streaming
-# 3. https://yandex.cloud/ru/docs/speechkit/tts/api/tts-streaming
-# 4. python3 -m grpc_tools.protoc -I . -I third_party/googleapis \
-#   --python_out=output \
-#   --grpc_python_out=output \
-#   yandex/cloud/ai/tts/v3/tts_service.proto \
-#   yandex/cloud/ai/tts/v3/tts.proto
+# 2. Yandex SpeechKit:
 
+# https://yandex.cloud/ru/docs/speechkit/stt/api/microphone-streaming
+# https://yandex.cloud/ru/docs/speechkit/tts/api/tts-streaming
 
+# git clone https://github.com/yandex-cloud/cloudapi
 
+# pip install grpcio-tools
 
-
-
-
-
-
+# cd cloudapi && \
+# mkdir output && \
+# python3 -m grpc_tools.protoc -I . -I third_party/googleapis \
+#    --python_out=output \
+#    --grpc_python_out=output \
+#      google/api/http.proto \
+#      google/api/annotations.proto \
+#      yandex/cloud/api/operation.proto \
+#      google/rpc/status.proto \
+#      yandex/cloud/operation/operation.proto \
+#      yandex/cloud/validation.proto \
+#      yandex/cloud/ai/stt/v3/stt_service.proto \
+#      yandex/cloud/ai/stt/v3/stt.proto \
+#      yandex/cloud/ai/tts/v3/tts_service.proto \
+#      yandex/cloud/ai/tts/v3/tts.proto

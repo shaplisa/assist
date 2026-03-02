@@ -7,7 +7,6 @@ from speechkit import YaSpeechKit
 from audio import Audio
 import subprocess
 import psutil
-import os
 import gc
 # from display import image 
 from display import Display
@@ -20,7 +19,8 @@ audio = Audio()
 deepseek = DeepSeek()
 display = Display()
 net = Network()
-process = psutil.Process(os.getpid())
+total = psutil.virtual_memory()
+cpu_percent = psutil.cpu_percent(interval=1)
 
 
 
@@ -64,10 +64,10 @@ class CachingParameters:
 
 
             """ Вывод RAM """
-            used_ram = f"{process.memory_info().rss // 1024 // 1024}"
+            used_ram = total.percent
             if self.last_us_ram != used_ram:
                 display.add_display_task({"block": "icon", "name": "ram"})
-                display.add_display_task({"block": "size_ram", "text": used_ram})
+                display.add_display_task({"block": "size_ram", "text": f"{used_ram}%"})
                 self.last_us_ram = used_ram
 
             """ Вывод VOLUME """
@@ -77,7 +77,12 @@ class CachingParameters:
                 display.add_display_task({"block": "volume", "text": volume})
                 self.last_volume = volume
 
-            gc.collect()
+            print(f"Всего ОЗУ: {total.total // 1024 // 1024} MB")
+            print(f"Свободно ОЗУ: {total.available // 1024 // 1024} MB")
+            print(f"Использовано ОЗУ: {total.percent}%")
+            print(f"Загрузка CPU: {cpu_percent}%")
+
+            # gc.collect()
 
 
 
@@ -227,13 +232,13 @@ def main() -> None:
                 input_question = speechkit.get_last_transcription()
                 print("input_question:", input_question)
                 if not input_question:
-                    # Звуковая заготовка - Задай вопрос снова, я не разобрал
+                    audio.play_audio("./wavs/bormochish.wav")
                     print("Нет транс текста.. ")
                     continue
                 
                 text_stream_ds = deepseek.stream_llm_response(input_question)
                 speechkit.stream_synthesis(text_stream_ds)
-                gc.collect()
+                # gc.collect()
                 record_thread = None
 
 
@@ -241,6 +246,3 @@ def main() -> None:
         time.sleep(0.1)
 
 main()
-
-
-
