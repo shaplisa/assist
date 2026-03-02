@@ -10,7 +10,7 @@ HISTORY_LIMIT = 20
 
 
 # AUDIO:
-GAIN = 15
+GAIN = 10
 
 # YANDEX SpeechKit:
 SAVE_FILE = False # Сохранять аудио файл
@@ -37,11 +37,9 @@ SYS_CON = """
 5. ДОБАВЛЯЙ КАПЕЛЬКУ ЮМОРА
 """
 
-
 # GPIO:
 BUTTON_OFF_PIN = 5   # GPIO5 (физический пин 29)
 BUTTON_PIN = 6   # GPIO6 (физический пин 31)
-
 
 
 ## DISPLAY:
@@ -205,18 +203,8 @@ icons = {
 
 # GET KEYS:
 API_DS = str(os.environ.get("key_deepseek"))
-YANDEX = str(os.environ.get("yandex"))
+YANDEX= str(os.environ.get("yandex"))
 SUDO_PASS = str(os.environ.get("sudopass"))
-
-
-
-
-
-
-
-
-
-
 
 
 ''' 

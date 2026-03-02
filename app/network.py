@@ -136,5 +136,3 @@ class Network:
         except:
             pass
         return None
-
-

@@ -149,7 +149,7 @@ class YaSpeechKit:
                         current_phrase = ""
 
             self.last_transcription = ' '.join(phrases)
-            gc.collect()
+            # gc.collect()
             return self.last_transcription 
                     
         except grpc._channel._Rendezvous as err:
