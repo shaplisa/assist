@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import time
-import RPi.GPIO as GPIO
 from config import BUTTON_OFF_IP, BUTTON_SPEEK, GPIO_AMP, MOTHERBOARD
 
 
@@ -19,6 +18,7 @@ class Gpio:
     def _init_buttons(self):
         """Инициализация и настройка кнопок"""
         if self.motherboard == "RASPBERRY":
+            import RPi.GPIO as GPIO
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(self.button_speek, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.setup(self.button_ip, GPIO.IN, pull_up_down=GPIO.PUD_UP)
