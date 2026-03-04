@@ -6,11 +6,13 @@ from config import BUTTON_OFF_IP, BUTTON_SPEEK, GPIO_AMP, MOTHERBOARD
 
 class Gpio:
     def __init__(self):
-        """В зависимости от платы orange/rasp, инициализируются кнопки из config.py"""
+        """ В зависимости от платы orange/rasp, инициализируются кнопки из config.py.
+            библиотека RPi.GPIO ломает Orange, потому пляски self.gpio"""
         self.motherboard = MOTHERBOARD
         self.button_ip = BUTTON_OFF_IP
         self.button_speek = BUTTON_SPEEK
         self.out_amp = GPIO_AMP
+        self.gpio = None  # сюда сохраним библиотеку
         self._init_outs()
         self._init_buttons()
 
@@ -22,6 +24,7 @@ class Gpio:
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(self.button_speek, GPIO.IN, pull_up_down=GPIO.PUD_UP)
             GPIO.setup(self.button_ip, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            self.gpio = GPIO
         
         elif self.motherboard == "ORANGE":
             for gpio_one in [self.button_ip, self.button_speek]:
@@ -34,16 +37,17 @@ class Gpio:
                     #print(f"GPIO {gpio_one} настроен")
                 except Exception as e:
                     print(f"GPIO {gpio_one} уже настроен: {e}")
+            self.gpio = "orange"  # заглушка
 
 
     def status_button(self, name_button) -> bool | None:
         """Получение статуса кнопки RASPBERRY/ORANGE"""
         if self.motherboard == "RASPBERRY":
             try:  
-                if GPIO.input(name_button) == GPIO.LOW: return True
+                if self.gpio.input(name_button) == self.gpio.LOW: return True
                 else: return False
             except KeyboardInterrupt:
-                GPIO.cleanup()
+                self.gpio.cleanup()
                 return None
             
         elif self.motherboard == "ORANGE":

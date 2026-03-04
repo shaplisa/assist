@@ -17,6 +17,7 @@ psutil
 # pip cache purge - если что то пошло не так
 # pip install sox - в ручную
 # pip install grpcio-tools
+# pip install --upgrade grpcio==1.78.1 - принудительно обновить, бывает ругается
 # - для orange pi - pip install OPi.GPIO
 
 

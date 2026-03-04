@@ -22,7 +22,7 @@ net = Network()
 total = psutil.virtual_memory()
 cpu_percent = psutil.cpu_percent(interval=1)
 
-button.on_amp() # Включили усилитель звука
+button.on_amp() # Включили усилитель звука, пока так ..
 
 
 

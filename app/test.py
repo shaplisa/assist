@@ -1,20 +1,3 @@
-from config import BUTTON_OFF_PIN
-
-
-
-
-
-
-
-
-
-
-
-
-print(BUTTON_OFF_PIN)
-
-
-
 
 
 
