@@ -1,7 +1,7 @@
 numpy==2.2.6
 openai==2.9.0
 python-dotenv==1.2.1
-RPi.GPIO==0.7.1
+RPi.GPIO==0.7.1 # только для разбери пай 
 pillow==12.1.1
 luma.core==2.5.3
 luma.oled==3.14.0

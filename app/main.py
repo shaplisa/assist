@@ -1,7 +1,7 @@
-from config import BUTTON_OFF_PIN, BUTTON_PIN, SUDO_PASS, CACHE_SEC_DISP
+from config import BUTTON_OFF_IP, BUTTON_SPEEK, SUDO_PASS, CACHE_SEC_DISP
 from network import Network
 import time
-from buttons import status_button
+from buttons import Gpio
 from deepseek import DeepSeek
 from speechkit import YaSpeechKit
 from audio import Audio
@@ -13,7 +13,7 @@ from display import Display
 import threading
 # from memory import memory_percent_get
 
-
+button = Gpio()
 speechkit = YaSpeechKit()
 audio = Audio()
 deepseek = DeepSeek()
@@ -21,6 +21,8 @@ display = Display()
 net = Network()
 total = psutil.virtual_memory()
 cpu_percent = psutil.cpu_percent(interval=1)
+
+button.on_amp() # Включили усилитель звука
 
 
 
@@ -156,7 +158,8 @@ def main() -> None:
 
         '''кнопка левая'''
 
-        button_off_status = status_button(BUTTON_OFF_PIN) 
+        button_off_status = button.status_button(BUTTON_OFF_IP)
+        if button_off_status == None: print(f"Ошибка с определением состояния кнопки - {BUTTON_OFF_IP}")
 
         if button_off_status == True and flag_off > 11 :
             # print("выключаюсь")
@@ -207,7 +210,8 @@ def main() -> None:
 
 
         ''' кнпока правая со звуком'''
-        status_hold = status_button(BUTTON_PIN)
+        status_hold = button.status_button(BUTTON_SPEEK)
+        if status_hold == None: print(f"Ошибка с определением состояния кнопки - {BUTTON_SPEEK}")
 
         recording_active = speechkit.get_recording_active()
 

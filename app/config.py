@@ -11,9 +11,9 @@ MOTHERBOARD = "ORANGE"  # или "RASPBERRY"
 # RASPBERRY:
 if MOTHERBOARD == "RASPBERRY":
     # GPIO:
-    BUTTON_OFF_PIN = 5 # GPIO5 (физический пин 29) - ip и выключение
-    BUTTON_PIN = 6 # GPIO6 (физический пин 31) - говорить
-    # GPIO_AMP =  # Stand By AMP
+    BUTTON_OFF_IP = 5 # GPIO5 (физический пин 29) - ip и выключение
+    BUTTON_SPEEK = 6 # GPIO6 (физический пин 31) - говорить
+    GPIO_AMP = None # Stand By AMP позже, сейчас через терминал выставлено True - 3.3
 
     # DISPLAY:
     port = 1
@@ -23,8 +23,8 @@ if MOTHERBOARD == "RASPBERRY":
 # ORANGE:
 elif MOTHERBOARD == "ORANGE":
     # GPIO:
-    BUTTON_OFF_PIN = 227   # ip и выключение
-    BUTTON_PIN = 226   # говорить
+    BUTTON_OFF_IP = 227   # ip и выключение
+    BUTTON_SPEEK = 226   # говорить
     GPIO_AMP = 76 # Stand By AMP
     # DISPLAY:
     port = 3 # h618 Физические пины 3,5 = I2C1 контроллер = шина i2c-3 (да, странно, но вот так)
@@ -36,7 +36,7 @@ elif MOTHERBOARD == "ORANGE":
 HISTORY_LIMIT = 20
 
 # AUDIO:
-GAIN = 10
+GAIN = 1
 
 # YANDEX SpeechKit:
 SAVE_FILE = False # Сохранять аудио файл
