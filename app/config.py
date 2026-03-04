@@ -5,9 +5,35 @@ load_dotenv()
 
 
 
+# MATHERBOARD (ORANGE or RASPBERRY):
+MOTHERBOARD = "ORANGE"  # или "RASPBERRY"
+
+# RASPBERRY:
+if MOTHERBOARD == "RASPBERRY":
+    # GPIO:
+    BUTTON_OFF_PIN = 5 # GPIO5 (физический пин 29) - ip и выключение
+    BUTTON_PIN = 6 # GPIO6 (физический пин 31) - говорить
+    # GPIO_AMP =  # Stand By AMP
+
+    # DISPLAY:
+    port = 1
+    screen_height = 64
+    screen_width = 128
+    
+# ORANGE:
+elif MOTHERBOARD == "ORANGE":
+    # GPIO:
+    BUTTON_OFF_PIN = 227   # ip и выключение
+    BUTTON_PIN = 226   # говорить
+    GPIO_AMP = 76 # Stand By AMP
+    # DISPLAY:
+    port = 3 # h618 Физические пины 3,5 = I2C1 контроллер = шина i2c-3 (да, странно, но вот так)
+    screen_height = 32
+    screen_width = 128
+
+
 # SYSTEM LLM:
 HISTORY_LIMIT = 20
-
 
 # AUDIO:
 GAIN = 10
@@ -15,14 +41,10 @@ GAIN = 10
 # YANDEX SpeechKit:
 SAVE_FILE = False # Сохранять аудио файл
 
-# TTS:
-
-
 # STT:
 RATE = 16000
 CHUNK = 4096  # размер блока в байтах (примерно 0.25 секунды при 16kHz)
 RECORD_SECONDS = 30
-
 
 # DeepSeek:
 MODEL_DS = "deepseek-chat"
@@ -37,17 +59,10 @@ SYS_CON = """
 5. ДОБАВЛЯЙ КАПЕЛЬКУ ЮМОРА
 """
 
-# GPIO:
-BUTTON_OFF_PIN = 5   # GPIO5 (физический пин 29)
-BUTTON_PIN = 6   # GPIO6 (физический пин 31)
 
 
 ## DISPLAY:
-port = 1 
 address = 0x3C
-
-screen_height = 64
-screen_width = 128
 
 font_name = "DejaVuSans.ttf"
 font_size = 9
@@ -59,10 +74,10 @@ line_height = 10
 # Сокращение строки на экран
 MAX_LINE_LENGTH = 25 # Максимальное допустимое значение символов в строке
 TRUNCATE_AT = 23 # Сокращает до 23 и ставит ..
-
 CACHE_SEC_DISP = 3 # Проверяет для вывода данных на экран каждые 3 секунды
-
 I_TURN_OFF = 5 # Таймер отключения устройства
+
+
 
 # Размеченные блоки на экране:
 """ На экране 3 строки по 10 пикселей высотой 128 длиной.
