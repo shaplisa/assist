@@ -1,4 +1,4 @@
-sudo nano /etc/systemd/system/assistant.service
+sudo nano /etc/systemd/system/opi-core.service
 
 [Unit]
 Description=OPI Core Application

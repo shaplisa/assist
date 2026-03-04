@@ -11,7 +11,7 @@ class Audio:
         self.gain = GAIN
 
 
-    def play_audio(self, filename: str, gain_db) -> bool:
+    def play_audio(self, filename: str) -> bool:
         """
             Воспроизведение аудиофайла с усилением через play (sox)
             
