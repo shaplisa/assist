@@ -8,11 +8,10 @@ from config import GAIN
 
 class Audio:
     def __init__(self):
-        pass
+        self.gain = GAIN
 
 
-    @staticmethod
-    def play_audio(filename: str, gain_db=GAIN) -> bool:
+    def play_audio(self, filename: str, gain_db) -> bool:
         """
             Воспроизведение аудиофайла с усилением через play (sox)
             
@@ -20,6 +19,9 @@ class Audio:
             filename - путь к аудиофайлу для воспроизведения
             gain_db - усиление в дБ (по умолчанию 20)
         """
+
+        gain_db = self.gain
+
         # Проверяем, существует ли файл
         if not os.path.exists(filename):
             print(f"Ошибка: файл {filename} не найден")
@@ -42,6 +44,12 @@ class Audio:
         except FileNotFoundError:
             print("Ошибка: play не найден. Установите sox: sudo apt install sox")
             return False
+        
+    def get_gain(self):
+        return self.gain
+    
+    def set_gain(self, value: int):
+        self.gain = value
 
 
 

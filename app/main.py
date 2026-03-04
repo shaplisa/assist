@@ -7,11 +7,10 @@ from speechkit import YaSpeechKit
 from audio import Audio
 import subprocess
 import psutil
-import gc
-# from display import image 
+import queue
 from display import Display
 import threading
-# from memory import memory_percent_get
+
 
 button = Gpio()
 speechkit = YaSpeechKit()
@@ -23,6 +22,63 @@ total = psutil.virtual_memory()
 cpu_percent = psutil.cpu_percent(interval=1)
 
 button.on_amp() # Включили усилитель звука, пока так ..
+
+
+# Очередь событий выставленных ИИ Агентом на исполнение
+agent_task_queue = queue.Queue(maxsize=20)
+
+
+
+
+
+
+
+
+
+
+
+def run_tasks_actions():
+    """ Обработка задач из очереди агента """
+    try:
+        task = agent_task_queue.get(timeout=0.1)
+        #print(f"[Queue] Получена задача: {task}")
+        
+        command = task.get("command")
+        
+        if command == "set_volume":
+            volume = task.get('volume')
+            #print(f"\nВыполняю: set_volume {volume}")
+            if audio.set_gain(volume):
+                #print(f"\nВыполнено: set_volume {volume}")
+                display.add_display_task({"block": "line", "text": f"set_volume {volume}"})
+        
+        elif command == "poweroff":
+            #print("\nВыполняю: poweroff")
+            display.add_display_task({"block": "line", "text": "Выключаюсь.."})
+            time.sleep(3)
+            display._clear_display()
+            subprocess.run(["sudo", "poweroff"])
+            return "SHUTDOWN"  # Флаг для выхода из цикла
+        
+        elif command == "reboot":
+            #print("\nВыполняю: reboot")
+            display.add_display_task({"block": "line", "text": "reboot"})
+            time.sleep(3)
+            display._clear_display()
+            subprocess.run(["sudo", "reboot"])
+            return "REBOOT"
+        
+        else:
+            #print(f"[WARN] Неизвестная команда: {command}")
+            display.add_display_task({"block": "line", "text": f"Неизвестная команда {command}"})
+        
+        agent_task_queue.task_done()
+        
+    except queue.Empty:
+        pass
+    
+    return "CONTINUE"
+
 
 
 
@@ -98,7 +154,6 @@ class CachingParameters:
 
 
 def main() -> None:
-    """ Главная функция"""
 
     """ Заупуск основной функции и цикла
         вносится или удаляется из списка цикла вывода экрана
@@ -107,24 +162,31 @@ def main() -> None:
     cache_param = CachingParameters()
 
 
-
-
     # #image("█▓▒░ ELIZABET ░▒▓█", 5, 10)
     # display.add_display_task({"block": "line", "text": "█▓▒░ ELIZABET ░▒▓█"})
-    # SYSTEMS
+    audio.play_audio("./wavs/1.wav")
 
+
+    # МОИ ЛЮБИМЫЕ ФЛАГИ:
     flag_ip = 0
     flag_off = 0
     flag_false = 0
     flag_memory_get = 0
     recording_active = False
     record_thread = None
-    
-    audio.play_audio("./wavs/1.wav")
+
 
     while True:
-        ''' Условия с айпи и вай фаем'''
-        get_ip = net.get_ip()
+
+        # Проверка очереди задач агента и выполнение:
+        run_tasks_actions()
+
+
+
+
+
+
+        get_ip = net.get_ip() ### !!!!????
 
         # Вывод на экран системных данных с кешированием
         cache_param.update_sys_display()
@@ -146,15 +208,7 @@ def main() -> None:
             # image("    ", 5, 20)
             flag_ip = 1
 
-            '''процент занятости памяти'''
 
-        # memory_percent = memory_percent_get()
-        # if flag_memory_get > 20:
-        #     #image(f"занято озу {memory_percent}%", 0, 5)
-        #     display.add_display_task({"block": "line", "text": f"озу:{memory_percent}%"})
-        #     flag_memory_get = 0
-        # else:
-        #     flag_memory_get += 1
 
         '''кнопка левая'''
 
@@ -249,4 +303,13 @@ def main() -> None:
 
         time.sleep(0.1)
 
-main()
+
+
+
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(f"An error occurred: {e}.")
