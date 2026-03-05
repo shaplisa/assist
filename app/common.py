@@ -36,5 +36,5 @@ def gain_to_percent(gain) -> int:
 
 
 
-print(percent_to_gain(100))
+print(gain_to_percent(20))
 #print(type(percent_to_gain(100)))

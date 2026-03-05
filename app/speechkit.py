@@ -1,8 +1,9 @@
 import subprocess
-from config import YANDEX, GAIN, SAVE_FILE, RATE, CHUNK, RECORD_SECONDS
+from config import YANDEX, SAVE_FILE, RATE, CHUNK, RECORD_SECONDS, VOLUME
 import grpc
 import gc
 from typing import Generator, Iterator, Optional
+from common import percent_to_gain
 # TTS
 import yandex.cloud.ai.tts.v3.tts_pb2 as tts_pb2
 import yandex.cloud.ai.tts.v3.tts_service_pb2_grpc as tts_service_pb2_grpc
@@ -15,18 +16,19 @@ import yandex.cloud.ai.stt.v3.stt_service_pb2_grpc as stt_service_pb2_grpc
 
 
 class YaSpeechKit:
-    def __init__(self, display):
+    def __init__(self, display, audio):
         # PUSH BUTTON ACT:
         self.record_process = None
         self.recording_active = False
         self.display = display
+        self.audio = audio
 
         # META:
         self.auth_meta = (("authorization", f"Api-key {YANDEX}"),)
 
         # TTS
         self.tts_channel = "tts.api.cloud.yandex.net:443"
-        self.gain = GAIN
+        self.gain = percent_to_gain(VOLUME)
         self.buffer = ""
 
         # STT
@@ -178,10 +180,12 @@ class YaSpeechKit:
         """Потоковый/Стриминговый Синтез Речи из генератора или гтового str"""
         cred = grpc.ssl_channel_credentials()
         auth_meta = self.auth_meta
+        volume = self.audio.get_volume()
+        gain = percent_to_gain(volume) or self.gain
 
         # Запускаем play с чтением из stdin
         play_process = subprocess.Popen(
-            ["play", "-t", "wav", "-", "gain", f"{self.gain}"],
+            ["play", "-t", "wav", "-", "gain", f"{gain}"],
             stdin=subprocess.PIPE
         )
 

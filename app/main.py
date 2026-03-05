@@ -15,8 +15,8 @@ import threading
 
 display = Display()
 button = Gpio()
-speechkit = YaSpeechKit(display)
 audio = Audio()
+speechkit = YaSpeechKit(display, audio)
 deepseek = DeepSeek()
 net = Network()
 total = psutil.virtual_memory()
