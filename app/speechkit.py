@@ -14,12 +14,12 @@ import yandex.cloud.ai.stt.v3.stt_service_pb2_grpc as stt_service_pb2_grpc
 
 
 
-
 class YaSpeechKit:
-    def __init__(self):
+    def __init__(self, display):
         # PUSH BUTTON ACT:
         self.record_process = None
         self.recording_active = False
+        self.display = display
 
         # META:
         self.auth_meta = (("authorization", f"Api-key {YANDEX}"),)
@@ -46,6 +46,11 @@ class YaSpeechKit:
 
     def change_recording_active(self, status: bool):
         self.recording_active = status
+
+
+    def output_to_screen(self, bufer: str):
+        if bufer: self.display.add_display_task({"block": "line", "text": f"ИИ: {bufer}"})
+
 
 
     # ЗАПИСЬ С МИКРОЫФОНА В СТРИМЕНГЕ
@@ -169,8 +174,8 @@ class YaSpeechKit:
 
 
     # СИНТЕЗ ГОЛОСОВОГО ОТВЕТА ОТ LLM
-    def stream_synthesis(self, text_stream: Generator[dict, None, None]):
-        """Потоковый/Стриминговый Синтез Речи"""
+    def stream_synthesis(self, text_stream: Generator[dict, None, None] | str):
+        """Потоковый/Стриминговый Синтез Речи из генератора или гтового str"""
         cred = grpc.ssl_channel_credentials()
         auth_meta = self.auth_meta
 
@@ -204,7 +209,9 @@ class YaSpeechKit:
             def request_generator():
                 yield tts_pb2.StreamSynthesisRequest(options=synthesis_options)
                 
-                if SAVE_FILE:
+                # Если строка
+                if type(text_stream) == str or SAVE_FILE:
+                    print("isy metod")
                     yield tts_pb2.StreamSynthesisRequest(
                         synthesis_input=tts_pb2.SynthesisInput(text=text_stream + " ")
                     )
@@ -213,16 +220,20 @@ class YaSpeechKit:
 
                 # Отправляем текст частями из DeepSeek
                 for chunk in text_stream:
+
                     if chunk['type'] == 'text':
                         self.buffer += chunk['content']
                         if any(p in self.buffer for p in ['.', '!', '?', ',']):
                             print("bufer1:", self.buffer)
+                            self.output_to_screen(self.buffer)
                             yield tts_pb2.StreamSynthesisRequest(
                                 synthesis_input=tts_pb2.SynthesisInput(text=self.buffer + " ")
                             )
                             self.buffer = ""
+                            
                 if self.buffer:
                     print("bufer2:", self.buffer)
+                    self.output_to_screen(self.buffer)
                     yield tts_pb2.StreamSynthesisRequest(
                         synthesis_input=tts_pb2.SynthesisInput(text=self.buffer + " ")
                     )

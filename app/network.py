@@ -21,49 +21,6 @@ class Network:
             print(f"Error get_ip_address: {e}")
             return False
 
-    # def get_current_ip(self):
-    #     """Получает текущий IP адрес интерфейса"""
-    #     try:
-    #         result = subprocess.run(
-    #             ['ip', '-4', 'addr', 'show', self.interface],
-    #             capture_output=True,
-    #             text=True
-    #         )
-            
-    #         for line in result.stdout.split('\n'):
-    #             if 'inet ' in line:
-    #                 # Пример: "inet 192.168.1.56/24 brd 192.168.1.255 scope global wlan0"
-    #                 return line.split()[1].split('/')[0]
-            
-    #         return None
-    #     except Exception as e:
-    #         print(f"Ошибка получения IP: {e}")
-    #         return None
-
-
-
-    # def should_takeover(self):
-    #     """ Прверяем наличие подключения и наличия интеренета """
-    #     try:
-    #         # Смотрим текущее подключение
-    #         result = subprocess.run(['iwconfig', self.interface], 
-    #                             capture_output=True, text=True)
-            
-    #         # Если нет ESSID или "Not-Associated"
-    #         if 'ESSID:""' in result.stdout or 'Not-Associated' in result.stdout:
-    #             return True
-            
-    #         # Проверяем есть ли интернет
-    #         ping_result = subprocess.run(['ping', '-c', '1', '-W', '2', '8.8.8.8'],
-    #                                 capture_output=True)
-    #         if ping_result.returncode != 0:
-    #             return True
-                
-    #         return False
-            
-    #     except:
-    #         return True
-
 
 
     @staticmethod
@@ -137,3 +94,72 @@ class Network:
         except:
             pass
         return None
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # def get_current_ip(self):
+    #     """Получает текущий IP адрес интерфейса"""
+    #     try:
+    #         result = subprocess.run(
+    #             ['ip', '-4', 'addr', 'show', self.interface],
+    #             capture_output=True,
+    #             text=True
+    #         )
+            
+    #         for line in result.stdout.split('\n'):
+    #             if 'inet ' in line:
+    #                 # Пример: "inet 192.168.1.56/24 brd 192.168.1.255 scope global wlan0"
+    #                 return line.split()[1].split('/')[0]
+            
+    #         return None
+    #     except Exception as e:
+    #         print(f"Ошибка получения IP: {e}")
+    #         return None
+
+
+
+    # def should_takeover(self):
+    #     """ Прверяем наличие подключения и наличия интеренета """
+    #     try:
+    #         # Смотрим текущее подключение
+    #         result = subprocess.run(['iwconfig', self.interface], 
+    #                             capture_output=True, text=True)
+            
+    #         # Если нет ESSID или "Not-Associated"
+    #         if 'ESSID:""' in result.stdout or 'Not-Associated' in result.stdout:
+    #             return True
+            
+    #         # Проверяем есть ли интернет
+    #         ping_result = subprocess.run(['ping', '-c', '1', '-W', '2', '8.8.8.8'],
+    #                                 capture_output=True)
+    #         if ping_result.returncode != 0:
+    #             return True
+                
+    #         return False
+            
+    #     except:
+    #         return True

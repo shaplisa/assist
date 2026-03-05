@@ -1,7 +1,7 @@
 numpy==2.2.6
 openai==2.9.0
 python-dotenv==1.2.1
-RPi.GPIO==0.7.1
+RPi.GPIO==0.7.1 # только для разбери пай 
 pillow==12.1.1
 luma.core==2.5.3
 luma.oled==3.14.0
@@ -12,19 +12,20 @@ psutil
 
 ##########
 
+# 1. Установка:
 # pip install -r requirements.txt
-# pip cache purge
+# pip cache purge - если что то пошло не так
+# pip install sox - в ручную
+# pip install grpcio-tools
+# pip install --upgrade grpcio==1.78.1 - принудительно обновить, бывает ругается
+# - для orange pi - pip install OPi.GPIO
 
-# 1. Установить в ручную кривой пакет - pip install sox он автоматом не устанавливается
 
 # 2. Yandex SpeechKit:
-
-# https://yandex.cloud/ru/docs/speechkit/stt/api/microphone-streaming
-# https://yandex.cloud/ru/docs/speechkit/tts/api/tts-streaming
+# https://yandex.cloud/ru/docs/speechkit/stt/api/microphone-streaming - инструкция
+# https://yandex.cloud/ru/docs/speechkit/tts/api/tts-streaming - инструкция
 
 # git clone https://github.com/yandex-cloud/cloudapi
-
-# pip install grpcio-tools
 
 # cd cloudapi && \
 # mkdir output && \
@@ -41,3 +42,5 @@ psutil
 #      yandex/cloud/ai/stt/v3/stt.proto \
 #      yandex/cloud/ai/tts/v3/tts_service.proto \
 #      yandex/cloud/ai/tts/v3/tts.proto
+
+# cp -r /yandex /root/assist/app/ - перенести папки /cloudapi/output/yandex & google в /app
