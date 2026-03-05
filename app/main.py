@@ -91,6 +91,7 @@ class CachingParameters:
         self.last_level = "" # Последний уровень сети WIFI
         self.last_us_ram = 0 # Последний объем занятой памяти
         self.last_volume = 0 # Последний уровень громкости
+        self.ip_value = "" # Последнее значение IP адреса
         self.cache_sec = CACHE_SEC_DISP # Время кэширования
 
 
