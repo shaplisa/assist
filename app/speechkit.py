@@ -210,7 +210,8 @@ class YaSpeechKit:
                 yield tts_pb2.StreamSynthesisRequest(options=synthesis_options)
                 
                 # Если строка
-                if isinstance(text_stream, str) or SAVE_FILE:
+                if type(text_stream) == str or SAVE_FILE:
+                    print("isy metod")
                     yield tts_pb2.StreamSynthesisRequest(
                         synthesis_input=tts_pb2.SynthesisInput(text=text_stream + " ")
                     )
