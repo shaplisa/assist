@@ -26,7 +26,6 @@ class DeepSeek:
         self.tool_choice = "auto"
         # self.max_tokens = 1000
         # self.temperature = 0.7
-        self.last_full_answer = ""
 
 
     @staticmethod
@@ -358,17 +357,18 @@ class DeepSeek:
 
 
 
-    def stream_llm_response(self, text: str) -> Generator[dict, None, None]:
+    def stream_llm_response(self, text: str, display) -> Generator[dict, None, None]:
         """Запрос в режиме стрим к DeepSeek короткая версия"""
         full_answer = ""
         for chunk in self._call_request(text):
             delta = chunk.choices[0].delta
-            if delta.content:
-                yield {'type': 'text', 'content': delta.content}
-                full_answer += delta.content
+            if delta: answer_chank = delta.content
+            if answer_chank:
+                yield {'type': 'text', 'content': answer_chank}
+                display.add_display_task({"block": "line", "text": f"ИИ: {answer_chank}"})
+                full_answer += answer_chank
             
         self._add_dialog(text, full_answer)
-        self.last_full_answer = full_answer
 
 
 

@@ -159,10 +159,10 @@ class CachingParameters:
             ip_value = net.get_ip()
             if self.ip_value != ip_value:
                 if not ip_value:
-                    display.add_display_task({"block": "line", "text": "вай-фай не подключён"})
+                    display.add_display_task({"block": "line", "text": "ИИ: вай-фай не подключён"})
                     audio.play_audio("./wavs/2.wav")
                 elif ip_value:
-                    display.add_display_task({"block": "line", "text": "вай-фай подключён"})
+                    display.add_display_task({"block": "line", "text": "ИИ: вай-фай подключён"})
                     audio.play_audio("./wavs/4.wav")
                 self.ip_value = ip_value
 
@@ -267,9 +267,6 @@ def main() -> None:
             if record_thread:
                 record_thread.join()
 
-                # trans_text = speechkit.get_last_transcription()
-                # if trans_text: display.add_display_task({"block": "line", "text": f"Я: {trans_text}"})
-
                 input_question = speechkit.get_last_transcription()
                 # print("input_question:", input_question)
                 if not input_question:
@@ -281,11 +278,11 @@ def main() -> None:
 
 
                 if input_question: display.add_display_task({"block": "line", "text": f"Я: {input_question}"})
-                text_stream_ds = deepseek.stream_llm_response(input_question)
+                text_stream_ds = deepseek.stream_llm_response(input_question, display)
                 speechkit.stream_synthesis(text_stream_ds)
 
-                answer = deepseek.get_last_answer()
-                if answer: display.add_display_task({"block": "line", "text": f"ИИ: {answer}"})
+                # answer = deepseek.get_last_answer()
+                # if answer: display.add_display_task({"block": "line", "text": f"ИИ: {answer}"})
 
                 record_thread = None
 
