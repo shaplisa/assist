@@ -269,11 +269,8 @@ def worker_ds(input_question: str) -> Generator[dict, None, None]:
                     #tp.add_to_buffer("[ERROR]: Произошла ошибка при обработке запроса.")
                     #process_tts_buffer(force_flush=True)
         
-        else:  # CHAT или любой другой intent
-            # Обработка обычного чата без tools
-            return deepseek.stream_llm_response(input_question)
-            #speechkit.stream_synthesis(text_stream_ds)
-
+        else:
+            yield deepseek.stream_llm_response(input_question)
 
     except Exception as e:
         print(f"[ERROR] Критическая ошибка в основном цикле: {e}")
@@ -404,15 +401,12 @@ def main() -> None:
 
 
 
-
+                #text_stream_ds = deepseek.stream_llm_response(input_question)
 
 
 
 
                 text_stream_ds = worker_ds(input_question)
-
-                #text_stream_ds = deepseek.stream_llm_response(input_question)
-
 
                 speechkit.stream_synthesis(text_stream_ds)
 
