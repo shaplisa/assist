@@ -161,9 +161,8 @@ def main() -> None:
     
     cache_param = CachingParameters()
 
-
-    # #image("█▓▒░ ELIZABET ░▒▓█", 5, 10)
-    # display.add_display_task({"block": "line", "text": "█▓▒░ ELIZABET ░▒▓█"})
+    # Приветствие:
+    display.add_display_task({"block": "line", "text": "█▓▒░ ELIZABET ░▒▓█"})
     audio.play_audio("./wavs/1.wav")
 
 
@@ -176,10 +175,19 @@ def main() -> None:
     record_thread = None
 
 
+
+
     while True:
 
         # Проверка очереди задач агента и выполнение:
         run_tasks_actions()
+
+        # Получаем значения кнопок:
+        status_button_ip_off = button.status_button(BUTTON_OFF_IP)
+        status_button_speek = button.status_button(BUTTON_SPEEK)
+
+        # Вывод на экран системных данных с кешированием
+        cache_param.update_sys_display()
 
 
 
@@ -188,8 +196,6 @@ def main() -> None:
 
         get_ip = net.get_ip() ### !!!!????
 
-        # Вывод на экран системных данных с кешированием
-        cache_param.update_sys_display()
         
 
         if not get_ip:
@@ -200,25 +206,13 @@ def main() -> None:
             flag_ip = 0
             
         elif flag_ip == 0 and get_ip:
-            # print(f"ip : {get_ip}")
             audio.play_audio("./wavs/4.wav")
-            # image(get_ip, 5, 10)
-            # time.sleep(5)
-            # # print("end 5 sec")
-            # image("    ", 5, 20)
             flag_ip = 1
 
 
 
-        '''кнопка левая'''
-
-        button_off_status = button.status_button(BUTTON_OFF_IP)
-        if button_off_status == None: print(f"Ошибка с определением состояния кнопки - {BUTTON_OFF_IP}")
-
-        if button_off_status == True and flag_off > 11 :
-            # print("выключаюсь")
+        if status_button_ip_off == True and flag_off > 11 :
             audio.play_audio("./wavs/3.wav")
-            #image("выключаюсь(", 5, 20)
             display.add_display_task({"block": "line", "text": "выключаюсь("})
 
             
@@ -247,31 +241,23 @@ def main() -> None:
             proc.communicate(input = SUDO_PASS + "\n", timeout=30)            
 
         elif flag_off < 10 and flag_false > 0 :
-            #image(get_ip, 5, 10)
             display.add_display_task({"block": "line", "text": get_ip})
-            #time.sleep(5)
-            #image("  ", 5, 10)
             flag_off = 0
             flag_false = 0
 
-        elif button_off_status == True:
+        elif status_button_ip_off == True:
             flag_off += 1
 
-        elif flag_off > 1 and button_off_status == False:
+        elif flag_off > 1 and status_button_ip_off == False:
             flag_false += 1
             
 
 
 
-        ''' кнпока правая со звуком'''
-        status_hold = button.status_button(BUTTON_SPEEK)
-        if status_hold == None: print(f"Ошибка с определением состояния кнопки - {BUTTON_SPEEK}")
-
+        # Забираем состояние флага активной записи
         recording_active = speechkit.get_recording_active()
 
-        if status_hold == True and not recording_active:
-            #image("записываю вопрос,", 5, 10)
-            #image("ГОВОРИ!", 5, 20 )
+        if status_button_speek == True and not recording_active:
             display.add_display_task({"block": "line", "text": "ГОВОРИ!"})
             speechkit.change_recording_active(True)
 
@@ -279,7 +265,7 @@ def main() -> None:
             record_thread = threading.Thread(target=speechkit.stream_mic_record)
             record_thread.start()
 
-        elif status_hold == False and recording_active:
+        elif status_button_speek == False and recording_active:
             time.sleep(2)
             print("Останавливаю запись...")
             speechkit.change_recording_active(False)
@@ -296,9 +282,7 @@ def main() -> None:
                 
                 text_stream_ds = deepseek.stream_llm_response(input_question)
                 speechkit.stream_synthesis(text_stream_ds)
-                # gc.collect()
                 record_thread = None
-
 
 
         time.sleep(0.1)
