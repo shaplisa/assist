@@ -496,7 +496,19 @@ class CachingParameters:
 
 
 
-
+for chunk in text_stream:
+    if isinstance(chunk, str):
+        # Если пришла строка (например, из text_generator)
+        text = chunk
+    elif isinstance(chunk, dict) and chunk.get('type') == 'text':
+        # Если пришёл словарь (из основного потока)
+        text = chunk['content']
+    else:
+        print(f"Неподдерживаемый тип чанка: {type(chunk)}")
+        continue
+    
+    self.buffer += text
+    # ... дальше как было
 
 
 

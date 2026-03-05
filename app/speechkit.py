@@ -229,16 +229,14 @@ class YaSpeechKit:
                 # Отправляем текст частями из DeepSeek
                 for chunk in text_stream:
 
-                    if not isinstance(chunk, dict):
-                        print(f"Пропущен не-словарь: {chunk}")
-                        continue
-                        
-                    if chunk.get('type') != 'text':
-                        print(f"Пропущен не-text чанк: {chunk}")
-                        continue
-                        
-                    content = chunk.get('content')
-                    if not content:
+                    if isinstance(chunk, str):
+                        # Если пришла строка (например, из text_generator)
+                        text = chunk
+                    elif isinstance(chunk, dict) and chunk.get('type') == 'text':
+                        # Если пришёл словарь (из основного потока)
+                        text = chunk['content']
+                    else:
+                        print(f"Неподдерживаемый тип чанка: {type(chunk)}")
                         continue
 
 
