@@ -208,6 +208,7 @@ def main() -> None:
 
 
 
+
         if status_button_ip_off == True and not cache_param.get_turnon_ip_btn():
             """ Нажатие кнопки IP и Вывод SSH IP """
             current_ip = f"SSH IP: {net.get_ip()}"
@@ -217,7 +218,7 @@ def main() -> None:
             display.clear_area(0, 22, 128, 32) # Зачищаю sys
             cache_param.change_turnon_ip_btn(True)
 
-        if status_button_ip_off == True and cache_param.get_turnon_ip_btn():
+        elif status_button_ip_off == True and cache_param.get_turnon_ip_btn():
             """ Долго держу кнопку IP для выключения """
             i = cache_param.get_i()
             display.add_display_task({"block": "line", "text": f"Выключусь через {i}"})
@@ -238,7 +239,7 @@ def main() -> None:
                 break
             time.sleep(0.9)
 
-        if status_button_ip_off == False:
+        elif status_button_ip_off == False:
             """ Отжатие кнопки IP """
             cache_param.change_turnon_ip_btn(False)
             cache_param.clear_i()
@@ -267,7 +268,7 @@ def main() -> None:
                 record_thread.join()
 
                 trans_text = speechkit.get_last_transcription()
-                if trans_text: display.add_display_task({"block": "line", "text": trans_text})
+                if trans_text: display.add_display_task({"block": "line", "text": f"Я: {trans_text}"})
 
                 input_question = speechkit.get_last_transcription()
                 print("input_question:", input_question)
