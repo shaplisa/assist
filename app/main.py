@@ -15,8 +15,8 @@ import threading
 
 display = Display()
 button = Gpio()
-speechkit = YaSpeechKit(display)
 audio = Audio()
+speechkit = YaSpeechKit(display, audio)
 deepseek = DeepSeek()
 net = Network()
 total = psutil.virtual_memory()
@@ -29,8 +29,9 @@ agent_task_queue = queue.Queue(maxsize=20)
 record_thread = None
 
 
-# Приветствие:
-display.add_display_task({"block": "line", "text": "██▓▒░   ELIZABET   ░▒▓██"})
+# INTRO:
+text_intro = "██▓▒░   ELIZABET   ░▒▓██"
+display.add_display_task({"block": "line", "text": text_intro})
 audio.play_audio("./wavs/1.wav")
 #speechkit.stream_synthesis("ООО приветики, пистолетики")
 
@@ -52,7 +53,7 @@ def run_tasks_actions():
         if command == "set_volume":
             volume = task.get('volume')
             #print(f"\nВыполняю: set_volume {volume}")
-            if audio.set_gain(volume):
+            if audio.set_volume(volume):
                 #print(f"\nВыполнено: set_volume {volume}")
                 display.add_display_task({"block": "line", "text": f"set_volume {volume}"})
         
@@ -95,7 +96,7 @@ class CachingParameters:
         self.last_level = "" # Последний уровень сети WIFI
         self.last_us_ram = 0 # Последний объем занятой памяти
         self.last_volume = 0 # Последний уровень громкости
-        self.ip_value = "" # Последнее значение IP адреса
+        self.there_is_internet = None # Последнее наличие инета
         self.cache_sec = CACHE_SEC_DISP # Время кэширования
         """ Выключение устройства """
         self.i = I_TURN_OFF # Счетчик выключения устройства
@@ -131,7 +132,7 @@ class CachingParameters:
         self.last_level = "" # Последний уровень сети WIFI
         self.last_us_ram = 0 # Последний объем занятой памяти
         self.last_volume = 0 # Последний уровень громкости
-        # self.ip_value = "" # Последнее значение IP
+        # self.there_is_internet = None # Последнее налии инета
     
     def update_sys_display(self):
         """ Вывод на экран системных параметров с кэшированием """
@@ -151,27 +152,30 @@ class CachingParameters:
                 self.last_us_ram = used_ram
 
             """ Вывод VOLUME """
-            volume = audio.get_gain()
+            volume = audio.get_volume()
             if self.last_volume != volume:
                 display.add_display_task({"block": "icon", "name": "ico_vol"})
                 display.add_display_task({"block": "volume", "text": volume})
                 self.last_volume = volume
 
-            """ Проверка IP адреса """
-            ip_value = net.get_ip()
-            if self.ip_value != ip_value:
-                if not ip_value:
+            """ Проверка наличия инета """
+            there_is_internet = net.is_internet_connection()
+            if self.there_is_internet != there_is_internet:
+                if not there_is_internet:
                     display.add_display_task({"block": "line", "text": "ИИ: вай-фай не подключён"})
                     audio.play_audio("./wavs/2.wav")
-                elif ip_value:
+                elif there_is_internet:
                     display.add_display_task({"block": "line", "text": "ИИ: вай-фай подключён"})
                     audio.play_audio("./wavs/4.wav")
-                self.ip_value = ip_value
+                self.there_is_internet = there_is_internet
 
-            # print(f"Всего ОЗУ: {total.total // 1024 // 1024} MB")
-            # print(f"Свободно ОЗУ: {total.available // 1024 // 1024} MB")
-            # print(f"Использовано ОЗУ: {total.percent}%")
-            # print(f"Загрузка CPU: {cpu_percent}%")
+            print(f"Всего ОЗУ: {total.total // 1024 // 1024} MB")
+            print(f"Свободно ОЗУ: {total.available // 1024 // 1024} MB")
+            print(f"Использовано ОЗУ: {total.percent}%")
+            print(f"Загрузка CPU: {cpu_percent}%")
+
+
+
 
 
 
@@ -288,10 +292,9 @@ def main() -> None:
         # Вывод на экран системных данных с кешированием
         cache_param.update_sys_display()
 
-
         if status_button_ip_off == True and not cache_param.get_turnon_ip_btn():
             """ Нажатие кнопки IP и Вывод SSH IP """
-            current_ip = f"SSH IP: {net.get_ip()}"
+            current_ip = f"SSH IP: {net.get_current_ip()}"
             display.add_display_task({"block": "sys", "text": current_ip})
             cache_param._clear_last()
             time.sleep(3) # Время задержки SSH IP на экране
@@ -330,6 +333,13 @@ def main() -> None:
 
         if status_button_speek == True and not speechkit.get_recording_active():
             """ Нажатие кнопки - SPEEK """
+            # Проверить инет и если нет - аудио
+            is_internet = net.is_internet_connection()
+            if not is_internet:
+                display.add_display_task({"block": "line", "text": "ИИ: вай-фай не подключён"})
+                audio.play_audio("./wavs/2.wav")
+                continue
+
             display.add_display_task({"block": "line", "text": "ИИ: СЛУШАЮ!"})
             speechkit.change_recording_active(True)
 
