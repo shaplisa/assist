@@ -266,6 +266,7 @@ def main() -> None:
             if record_thread:
                 record_thread.join()
 
+                # Транскрибация голоса
                 input_question = speechkit.get_last_transcription()
                 # print("input_question:", input_question)
                 if not input_question:
@@ -275,8 +276,24 @@ def main() -> None:
                     continue
                 
 
+                # Текст вопроса транскрибирован
+                display.add_display_task({"block": "line", "text": f"Я: {input_question}"})
 
-                if input_question: display.add_display_task({"block": "line", "text": f"Я: {input_question}"})
+                # 
+                agent = "general_agent"
+                system, tools = deepseek.get_tools(agent)
+
+                # Извлекаем роутинг вне условия для лучшей читаемости
+                router_result = deepseek.hybrid_router(input_question)
+                #print(f"\nRouter Intent: {router_result}")
+                intent = router_result.get("intent", "CHAT")  # Значение по умолчанию
+                display.add_display_task({"block": "line", "text": f"ИИ: {intent}"})
+
+
+
+
+
+
                 text_stream_ds = deepseek.stream_llm_response(input_question)
                 speechkit.stream_synthesis(text_stream_ds)
 
