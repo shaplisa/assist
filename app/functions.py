@@ -48,6 +48,16 @@ def get_data() -> dict:
     }
 
 
+def change_system_content(text: str) -> dict:
+    """ Изменение system content, перезагрузка возвращает старый"""
+    print(text)
+    return {
+        "queue": True,
+        "command": "change_system_content",
+        "text": text,
+        "source": "voice_command"
+    }
+
 
 
 
@@ -98,6 +108,21 @@ FUNCTIONS = {
                 }
             },
             "required": ["volume"]
+        }
+    },
+    "change_system_content": {
+        "description": "ВСЕГДА вызывай эту функцию когда пользователь просит изменить систем контент - system content. \
+                        Он продиктует текст нового system content.",
+        "function": change_system_content,
+        "schema": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string",
+                    "description": "Текст нового систем контента продиктованный пользователем"
+                }
+            },
+            "required": ["text"]
         }
     }
 

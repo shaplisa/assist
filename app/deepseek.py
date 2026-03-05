@@ -28,6 +28,11 @@ class DeepSeek:
         # self.temperature = 0.7
 
 
+    def change_sys_content(self, new_sys_con: str):
+        """ Меняем system content до перезагрузки """
+        self.system_content = new_sys_con
+
+
     @staticmethod
     def _error_net(text_err):
         """Заглушка для ошибок сети. Возвращает объект в формате ответа API, 
@@ -198,7 +203,7 @@ class DeepSeek:
             return {'intent': 'CHAT', 'confidence': 0.75}
         
         # 6. Начинается с повелительного глагола (ВЫСОКАЯ уверенность ACTION!)
-        imperative_verbs = ['установи', 'поставь', 'включи', 'выключи', 'сделай', 'поменяй', 'настрой', 'перезагрузить', 'перезагрузка', 'перезагрузку']
+        imperative_verbs = ['установи', 'поставь', 'измени', 'включи', 'выключи', 'сделай', 'поменяй', 'настрой', 'перезагрузить', 'перезагрузка', 'перезагрузку']
         if words and words[0] in imperative_verbs:
             return {'intent': 'ACTION', 'confidence': 0.85}
         

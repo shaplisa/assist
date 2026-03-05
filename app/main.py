@@ -73,6 +73,12 @@ def run_tasks_actions():
             subprocess.run(["sudo", "reboot"])
             return "REBOOT"
         
+        elif command == "change_system_content":
+            text = task.get('text')
+            if deepseek.change_sys_content(text):
+                display.add_display_task({"block": "line", "text": f"set new system content: {text}"})
+        
+        
         else:
             #print(f"[WARN] Неизвестная команда: {command}")
             display.add_display_task({"block": "line", "text": f"Неизвестная команда {command}"})
