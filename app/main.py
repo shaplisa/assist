@@ -30,7 +30,7 @@ record_thread = None
 
 
 # INTRO:
-text_intro = "███▓▒░   ELIZABET   ░▒▓███"
+text_intro = "██▓▒░   ELIZABET   ░▒▓██"
 display.add_display_task({"block": "line", "text": text_intro})
 audio.play_audio("./wavs/1.wav")
 #speechkit.stream_synthesis("ООО приветики, пистолетики")
@@ -330,11 +330,15 @@ def main() -> None:
 
         if status_button_speek == True and not speechkit.get_recording_active():
             """ Нажатие кнопки - SPEEK """
+            # Проверить инет и если нет - аудио
+            is_internet = net.is_internet_connection()
+            if not is_internet:
+                display.add_display_task({"block": "line", "text": "ИИ: вай-фай не подключён"})
+                audio.play_audio("./wavs/2.wav")
+                continue
+
             display.add_display_task({"block": "line", "text": "ИИ: СЛУШАЮ!"})
             speechkit.change_recording_active(True)
-
-            # Проверить инет и если нет - аудио
-        
 
             # Запуск в отдельном потоке
             record_thread = threading.Thread(target=speechkit.stream_mic_record)
