@@ -181,11 +181,11 @@ class YaSpeechKit:
 
         # Если строка — оборачиваем в генератор
         if isinstance(text_stream, str):
-            # Если строка — превращаем в генератор с одним элементом
-            # def text_generator():
-            #     yield {'type': 'text', 'content': text_stream}
-            # text_stream = text_generator()
-            text_stream = {'type': 'text', 'content': text_stream}
+            #Если строка — превращаем в генератор с одним элементом
+            def text_generator():
+                print("сработал генератор")
+                yield {'type': 'text', 'content': text_stream}
+            text_stream = text_generator()
 
         # Запускаем play с чтением из stdin
         play_process = subprocess.Popen(
