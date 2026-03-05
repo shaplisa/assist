@@ -495,23 +495,44 @@ class CachingParameters:
 
 
 
-
 for chunk in text_stream:
+    # Получаем текст из разных форматов
     if isinstance(chunk, str):
-        # Если пришла строка (например, из text_generator)
+        # Если это уже готовая строка (целая фраза)
         text = chunk
     elif isinstance(chunk, dict) and chunk.get('type') == 'text':
-        # Если пришёл словарь (из основного потока)
+        # Если это словарь с контентом (из DeepSeek)
         text = chunk['content']
     else:
         print(f"Неподдерживаемый тип чанка: {type(chunk)}")
         continue
     
-    self.buffer += text
-    # ... дальше как было
+    # Если текст пришёл целой фразой (например, из text_generator)
+    if isinstance(chunk, str):
+        # Отдаём сразу всю фразу
+        self.output_to_screen(text)
+        yield tts_pb2.StreamSynthesisRequest(
+            synthesis_input=tts_pb2.SynthesisInput(text=text + " ")
+        )
+    else:
+        # Иначе накапливаем по словам
+        self.buffer += text
+        if any(p in self.buffer for p in ['.', '!', '?', ',']):
+            print("bufer1:", self.buffer)
+            self.output_to_screen(self.buffer)
+            yield tts_pb2.StreamSynthesisRequest(
+                synthesis_input=tts_pb2.SynthesisInput(text=self.buffer + " ")
+            )
+            self.buffer = ""
 
-
-
+# Остаток буфера после цикла (для случая со словами)
+if self.buffer:
+    print("bufer2:", self.buffer)
+    self.output_to_screen(self.buffer)
+    yield tts_pb2.StreamSynthesisRequest(
+        synthesis_input=tts_pb2.SynthesisInput(text=self.buffer + " ")
+    )
+    self.buffer = ""
 
 
 
