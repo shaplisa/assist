@@ -179,14 +179,6 @@ class YaSpeechKit:
         cred = grpc.ssl_channel_credentials()
         auth_meta = self.auth_meta
 
-        # Если строка — оборачиваем в генератор
-        if isinstance(text_stream, str):
-            #Если строка — превращаем в генератор с одним элементом
-            def text_generator():
-                print("сработал генератор")
-                yield {'type': 'text', 'content': text_stream}
-            text_stream = text_generator()
-
         # Запускаем play с чтением из stdin
         play_process = subprocess.Popen(
             ["play", "-t", "wav", "-", "gain", f"{self.gain}"],
@@ -217,8 +209,8 @@ class YaSpeechKit:
             def request_generator():
                 yield tts_pb2.StreamSynthesisRequest(options=synthesis_options)
                 
-                if SAVE_FILE:
-                    """При этом условии, text_stream - просто str"""
+                # Если строка
+                if isinstance(text_stream, str) or SAVE_FILE:
                     yield tts_pb2.StreamSynthesisRequest(
                         synthesis_input=tts_pb2.SynthesisInput(text=text_stream + " ")
                     )
@@ -227,20 +219,6 @@ class YaSpeechKit:
 
                 # Отправляем текст частями из DeepSeek
                 for chunk in text_stream:
-
-                    if isinstance(chunk, str):
-                        # Если пришла строка (например, из text_generator)
-                        text = chunk
-                        print("\nstr:", text)
-                    elif isinstance(chunk, dict) and chunk.get('type') == 'text':
-                        # Если пришёл словарь (из основного потока)
-                        text = chunk['content']
-                        print("\ndict:", text)
-                    else:
-                        print(f"Неподдерживаемый тип чанка: {type(chunk)}")
-                        print("\nhz", chunk)
-                        continue
-
 
                     if chunk['type'] == 'text':
                         self.buffer += chunk['content']
