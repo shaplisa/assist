@@ -270,7 +270,9 @@ def worker_ds(input_question: str) -> Generator[dict, None, None]:
                     #process_tts_buffer(force_flush=True)
         
         else:
-            yield deepseek.stream_llm_response(input_question)
+            # CHAT — отдаём напрямую из stream_llm_response
+            for chunk in deepseek.stream_llm_response(input_question):
+                yield chunk
 
     except Exception as e:
         print(f"[ERROR] Критическая ошибка в основном цикле: {e}")
