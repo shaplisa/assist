@@ -30,7 +30,8 @@ record_thread = None
 
 # Приветствие:
 display.add_display_task({"block": "line", "text": "█▓▒░ ELIZABET ░▒▓█"})
-audio.play_audio("./wavs/1.wav")
+#audio.play_audio("./wavs/1.wav")
+speechkit.stream_synthesis("ООО приветики, пистолетики")
 
 
 
