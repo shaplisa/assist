@@ -1,4 +1,4 @@
-from config import BUTTON_OFF_IP, BUTTON_SPEEK, SUDO_PASS, CACHE_SEC_DISP, I_TURN_OFF
+from config import BUTTON_OFF_IP, BUTTON_SPEEK, SUDO_PASS, CACHE_SEC_DISP, I_TURN_OFF, INTERNET_CONTROL, MOTHERBOARD
 from network import Network
 import time
 from typing import Generator, Iterator, Optional
@@ -30,7 +30,7 @@ record_thread = None
 
 
 # INTRO:
-text_intro = "██▓▒░   ELIZABET   ░▒▓██"
+text_intro = "█▓▒░ ASSISTENT 1.0 ░▒▓█"
 display.add_display_task({"block": "line", "text": text_intro})
 audio.play_audio("./wavs/1.wav")
 #speechkit.stream_synthesis("ООО приветики, пистолетики")
@@ -73,6 +73,12 @@ def run_tasks_actions():
             subprocess.run(["sudo", "reboot"])
             return "REBOOT"
         
+        elif command == "change_system_content":
+            text = task.get('text')
+            if deepseek.change_sys_content(text):
+                display.add_display_task({"block": "line", "text": f"set new system content: {text}"})
+        
+        
         else:
             #print(f"[WARN] Неизвестная команда: {command}")
             display.add_display_task({"block": "line", "text": f"Неизвестная команда {command}"})
@@ -101,6 +107,7 @@ class CachingParameters:
         """ Выключение устройства """
         self.i = I_TURN_OFF # Счетчик выключения устройства
         self.turnon_ip_btn = False # Флаг нажата ли кнопка IP
+        self.inet_control = 0 # Колличество неприрывной фиксации отсуствия или присуствия инета
 
     def get_i(self):
         return self.i
@@ -160,14 +167,28 @@ class CachingParameters:
 
             """ Проверка наличия инета """
             there_is_internet = net.is_internet_connection()
-            if self.there_is_internet != there_is_internet:
-                if not there_is_internet:
-                    display.add_display_task({"block": "line", "text": "ИИ: вай-фай не подключён"})
-                    audio.play_audio("./wavs/2.wav")
-                elif there_is_internet:
-                    display.add_display_task({"block": "line", "text": "ИИ: вай-фай подключён"})
-                    audio.play_audio("./wavs/4.wav")
-                self.there_is_internet = there_is_internet
+            """ Не озвучиваю о наличии или отсуствии инета, пока не будет 
+                факта 5 раз подряд отсуствия или присуствия """
+            if there_is_internet:
+                self.inet_control += 1
+            else:
+                self.inet_control -= 1
+
+            #print("inet_control:", self.inet_control)
+
+            if self.inet_control == INTERNET_CONTROL or self.inet_control == -(INTERNET_CONTROL):
+                if self.there_is_internet != there_is_internet:
+                    if not there_is_internet:
+                        display.add_display_task({"block": "line", "text": "ИИ: вай-фай не подключён"})
+                        audio.play_audio("./wavs/2.wav")
+                    elif there_is_internet:
+                        display.add_display_task({"block": "line", "text": "ИИ: вай-фай подключён"})
+                        audio.play_audio("./wavs/4.wav")
+                    self.there_is_internet = there_is_internet
+
+                self.inet_control = 0
+
+
 
             # print(f"Всего ОЗУ: {total.total // 1024 // 1024} MB")
             # print(f"Свободно ОЗУ: {total.available // 1024 // 1024} MB")
@@ -298,7 +319,8 @@ def main() -> None:
             display.add_display_task({"block": "sys", "text": current_ip})
             cache_param._clear_last()
             time.sleep(3) # Время задержки SSH IP на экране
-            display.clear_area(0, 44, 128, 64) # Зачищаю sys
+            if MOTHERBOARD == "RASPBERRY": display.clear_area(0, 44, 128, 64) # Зачищаю sys
+            if MOTHERBOARD == "ORANGE": display.clear_area(0, 22, 128, 32) # Зачищаю sys
             cache_param.change_turnon_ip_btn(True)
 
         elif status_button_ip_off == True and cache_param.get_turnon_ip_btn():
